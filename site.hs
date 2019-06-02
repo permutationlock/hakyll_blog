@@ -4,7 +4,11 @@ import Data.Monoid (mappend)
 import Data.Maybe
 import Text.Pandoc.Definition
 import Hakyll
-import Hakyll.Web.Pandoc (defaultHakyllReaderOptions, defaultHakyllWriterOptions, pandocCompilerWithTransformM)
+import Hakyll.Web.Pandoc
+    ( defaultHakyllReaderOptions
+    , defaultHakyllWriterOptions
+    , pandocCompilerWithTransformM
+    )
 import Image.LaTeX.Render
 import Image.LaTeX.Render.Pandoc
 import Hakyll.Contrib.LaTeX
@@ -18,53 +22,63 @@ main :: IO ()
 main = do
     renderFormulae <- initFormulaCompilerDataURI 1000 defaultEnv
     hakyll $ do
-        
-        match "images/*" $ do
-            route   idRoute
-            compile copyFileCompiler
-
         match "css/*" $ do
             route   idRoute
             compile compressCssCompiler
 
-        match (fromList ["about.rst", "contact.markdown"]) $ do
-            route   $ setExtension "html"
-            compile $ pandocCompiler
-                >>= loadAndApplyTemplate "templates/default.html" defaultContext
-                >>= relativizeUrls
-
-
         match "posts/*" $ do
             route $ setExtension "html"
-            compile $ postCompiler
+            compile $ do
+                maybePreamble <- (getUnderlying
+                    >>= flip getMetadataField "header-includes")
+                pandocCompilerWithTransformM defaultHakyllReaderOptions
+                    defaultHakyllWriterOptions
+                    (renderFormulae $ formulaOptionsFromPreamble maybePreamble)
+                    >>= loadAndApplyTemplate "templates/post.html" postCtx
+                    >>= loadAndApplyTemplate "templates/default.html" postCtx
+                    >>= relativizeUrls
 
-        create ["archive.html"] $ do
+        create ["blog.html"] $ do
             route idRoute
             compile $ do
                 posts <- recentFirst =<< loadAll "posts/*"
-                let archiveCtx =
+                let blogCtx =
                         listField "posts" postCtx (return posts) `mappend`
-                        constField "title" "Archives"            `mappend`
+                        constField "title" "Blog"            `mappend`
+                        constField "page-blog" "" `mappend`
                         defaultContext
 
                 makeItem ""
-                    >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
-                    >>= loadAndApplyTemplate "templates/default.html" archiveCtx
+                    >>= loadAndApplyTemplate "templates/blog.html" blogCtx
+                    >>= loadAndApplyTemplate "templates/default.html" blogCtx
                     >>= relativizeUrls
 
-
-        match "index.html" $ do
-            route idRoute
-            compile $ do
-                posts <- recentFirst =<< loadAll "posts/*"
-                let indexCtx =
-                        listField "posts" postCtx (return posts) `mappend`
-                        constField "title" "Home"                `mappend`
+        match "cv.md" $ do
+            route $ setExtension "html"
+            compile $ do 
+                let cvCtx =
+                        constField "page-cv" "" `mappend`
                         defaultContext
+                maybePreamble <- (getUnderlying
+                    >>= flip getMetadataField "header-includes")
+                pandocCompilerWithTransformM defaultHakyllReaderOptions
+                    defaultHakyllWriterOptions
+                    (renderFormulae $ formulaOptionsFromPreamble maybePreamble)
+                    >>= loadAndApplyTemplate "templates/default.html" cvCtx
+                    >>= relativizeUrls
 
-                getResourceBody
-                    >>= applyAsTemplate indexCtx
-                    >>= loadAndApplyTemplate "templates/default.html" indexCtx
+        match "index.md" $ do
+            route $ setExtension "html"
+            compile $ do
+                let aboutCtx =
+                        constField "page-about" "" `mappend`
+                        defaultContext
+                maybePreamble <- (getUnderlying
+                    >>= flip getMetadataField "header-includes")
+                pandocCompilerWithTransformM defaultHakyllReaderOptions
+                    defaultHakyllWriterOptions
+                    (renderFormulae $ formulaOptionsFromPreamble maybePreamble)
+                    >>= loadAndApplyTemplate "templates/default.html" aboutCtx
                     >>= relativizeUrls
 
         match "templates/*" $ compile templateBodyCompiler
@@ -76,18 +90,10 @@ postCtx =
     dateField "date" "%B %e, %Y" `mappend`
     defaultContext
 
-postCompiler :: Compiler (Item String)
-postCompiler = do
-    metadataPrelude <- getUnderlying >>= flip getMetadataField "header-includes" 
-    pandocCompilerWithTransformM defaultHakyllReaderOptions defaultHakyllWriterOptions
-        $ compileFormulaeDataURI defaultEnv (fo metadataPrelude)
-    where
-        fo hi = case hi of
-            Nothing -> defaultPandocFormulaOptions
-            Just s -> PandocFormulaOptions {
-                    shrinkBy = 2,
-                    errorDisplay = displayError,
-                    formulaOptions = \mathType -> case mathType of
-                        DisplayMath -> FormulaOptions s "displaymath" 200;
-                        _ -> FormulaOptions s "math" 200
-                }
+formulaOptionsFromPreamble :: Maybe String -> PandocFormulaOptions
+formulaOptionsFromPreamble Nothing = defaultPandocFormulaOptions
+formulaOptionsFromPreamble (Just pre) = defaultPandocFormulaOptions {
+        formulaOptions = \mathtype -> case mathtype of
+                DisplayMath -> displaymath { preamble = pre }
+                _           -> math        { preamble = pre }
+    }

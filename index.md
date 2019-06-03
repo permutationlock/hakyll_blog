@@ -8,8 +8,7 @@ I am a math grad student at
 [Simon Fraser University](http://www.sfu.ca/math.html)
 in Vancouver, supervised by
 [Nils Bruin](http://www.cecm.sfu.ca/~nbruin/index.shtml).
-I previously lived in Fairbanks, Alaska, and I am originally from
-the village of McGrath.
+I am originally from Fairbanks, Alaska.
 
 ### Interests
 

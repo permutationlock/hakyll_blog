@@ -26,7 +26,7 @@ main = do
             route   idRoute
             compile compressCssCompiler
 
-        match "posts/*" $ do
+        match "posts/*.md" $ do
             route $ setExtension "html"
             compile $ do
                 maybePreamble <- (getUnderlying
@@ -38,18 +38,45 @@ main = do
                     >>= loadAndApplyTemplate "templates/default.html" postCtx
                     >>= relativizeUrls
 
-        create ["blog.html"] $ do
+        match "notes/*.md" $ do
+            route $ setExtension "html"
+            compile $ do
+                maybePreamble <- (getUnderlying
+                    >>= flip getMetadataField "header-includes")
+                pandocCompilerWithTransformM defaultHakyllReaderOptions
+                    defaultHakyllWriterOptions
+                    (renderFormulae $ formulaOptionsFromPreamble maybePreamble)
+                    >>= loadAndApplyTemplate "templates/post.html" defaultContext
+                    >>= loadAndApplyTemplate "templates/default.html" defaultContext
+                    >>= relativizeUrls
+
+        create ["posts.html"] $ do
             route idRoute
             compile $ do
                 posts <- recentFirst =<< loadAll "posts/*"
                 let blogCtx =
                         listField "posts" postCtx (return posts) `mappend`
-                        constField "title" "Blog"            `mappend`
-                        constField "page-blog" "" `mappend`
+                        constField "title" "Posts"            `mappend`
+                        constField "page-posts" "" `mappend`
                         defaultContext
 
                 makeItem ""
-                    >>= loadAndApplyTemplate "templates/blog.html" blogCtx
+                    >>= loadAndApplyTemplate "templates/posts.html" blogCtx
+                    >>= loadAndApplyTemplate "templates/default.html" blogCtx
+                    >>= relativizeUrls
+
+        create ["notes.html"] $ do
+            route idRoute
+            compile $ do
+                posts <- loadAll "notes/*"
+                let blogCtx =
+                        listField "notes" defaultContext (return posts) `mappend`
+                        constField "title" "Notes"            `mappend`
+                        constField "page-notes" "" `mappend`
+                        defaultContext
+
+                makeItem ""
+                    >>= loadAndApplyTemplate "templates/notes.html" blogCtx
                     >>= loadAndApplyTemplate "templates/default.html" blogCtx
                     >>= relativizeUrls
 

@@ -46,8 +46,8 @@ main = do
                 pandocCompilerWithTransformM defaultHakyllReaderOptions
                     defaultHakyllWriterOptions
                     (renderFormulae $ formulaOptionsFromPreamble maybePreamble)
-                    >>= loadAndApplyTemplate "templates/post.html" defaultContext
-                    >>= loadAndApplyTemplate "templates/default.html" defaultContext
+                    >>= loadAndApplyTemplate "templates/post.html" postCtx
+                    >>= loadAndApplyTemplate "templates/default.html" postCtx
                     >>= relativizeUrls
 
         create ["posts.html"] $ do

@@ -29,7 +29,7 @@ $$
 in $\mathbb{P}^3.$ Observe that this map is clearly bijectve on the the
 affine patch $T_0\ne 0$ as we then dehomogenize coordinates
 with $T_0=1$ and find $T_3=T_1^2.$ We also find that there is a
-single point $O'=[0,0,0,1]$ in $V_1\cap V_2.$
+single point $O'=[0,0,0,1]$ in $V_1\cap V_2$ satisfying $T_0=0.$
 Observe that $X/Y,Z/Y$ generate $\mathfrak{m}_{E,O}$ and
 $$
     \frac{Z}{Y}=\left(\frac{X}{Y}\right)^3

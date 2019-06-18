@@ -4,7 +4,7 @@ title: Hartshorne
 geometry: margin=1in
 fontsize: 12pt
 published: June 16, 2019
-header-includes: \usepackage{amsmath,amsthm,amssymb,mathrsfs}
+header-includes: \usepackage{amsmath,amsthm,amssymb,mathrsfs}\usepackage[all]{xy}
 ...
 
 
@@ -121,7 +121,7 @@ Observe that the map $\mathscr{F}\to\mathscr{F}/\mathscr{F}'$ given locally by
 $s\mapsto s+\mathscr{F}'(U)$ for $s\in\mathscr{F}(U)$ is surjective onto the
 quotient presheaf. Thus it is surjective onto the quotient sheaf as the image
 sheaf of this map and quotient sheaf $\mathscr{F}/\mathscr{F}'$ are both the
-sheaffification of the the quotient presheaf.
+sheafification of the the quotient presheaf.
 
 **1.6.b.**
 Since $\mathscr{F}'\hookrightarrow\mathscr{F}$ we may identify $\mathscr{F}'$
@@ -207,7 +207,7 @@ maps $f_i(U):\mathscr{F}_i(U)\to\varinjlim\mathscr{F}_i(U)$ and a map
 $\varphi(U):\varinjlim\mathscr{F}_i(U)\to\mathscr{G}(U)$ such that
 $g_i(U)=\varphi(U)\circ f_i(U).$ These define morphisms of presheaves showing
 that the presheaf $U\mapsto\varinjlim\mathscr{F}_i(U)$ is a direct limit in the
-category of presheaves. Thus the sheaffification $\varinjlim \mathscr{F}_i$
+category of presheaves. Thus the sheafification $\varinjlim \mathscr{F}_i$
 is a direct limit in the category of sheaves.
 
 **1.11.** *Inverse limits*.
@@ -251,7 +251,7 @@ category of sheaves since it satisfies the inverse limit property locally for
 each open set.
 
 **1.13.** *Espace Étale of a Presheaf*. See the corresponding Eisenbud
-exercise.
+exercise I-8.
 
 **1.14.** *Support.*
 Suppose $Q\in U\setminus\text{Supp}(s).$ Then $s_Q=0$ so there exists an open
@@ -401,7 +401,7 @@ pushforward $i_*(A)$ under the given inclusion map $i.$
 **1.18.** *Adjoint Property of $f^{-1}$*.
 
 **Note.** *Explicit representation of direct limits.*
-In what follows we use the construction of direct limits:
+We use the following construction of direct limits:
 if $A_\alpha$ is a directed system of groups with maps
 $\phi_{\alpha,\beta}:A_{\alpha}\to A_{\beta}$, then
 $\varinjlim A_\alpha=\{(s,A_\alpha) : s\in A_\alpha\}/\sim$ where
@@ -413,19 +413,23 @@ A_{\gamma}]$ where $\gamma\ge \alpha,\beta.$
 
 <div class="proof">
 For a given topological space $X$ let
-$\mathscr{PSh}_X,\mathscr{Sh}_X$ be the category of presheaves on $X$ and
-the category of sheaves on $X$, respectively.
+$\text{PSh}_X$ be the category of presheaves on $X$.
 
-We will show that $f^{-1}$ without sheaffification is a left adjoint to $f_*$
-in the category of presheaves, and hence the sheaffified $f^{-1}$ is a left
-adjoint to $f_*$
-in the category of sheaves.
+We will show below that $f^{-1}$ without sheafification is a left adjoint to $f_*$
+in the category of presheaves. Thus there will be a bijection between
+the set of presheaf maps $\mathscr{G}\to f_*\mathscr{F}$ and the set of
+presheaf maps $f^{-1}\mathscr{G}\to\mathscr{F}$. 
+Recall that for a sheaf $\mathscr{G}$ and a presheaf $\mathscr{F}$ there is a
+bijection between the set of presheaf maps $\mathscr{F}\to\mathscr{G}$ and the
+set of sheaf maps $\mathscr{F}^+\to\mathscr{G}$ where $\mathscr{F}^+$ is the
+sheafification of $\mathscr{F}$. Thus after the sheafification of $f^{-1}$
+we will have the adjoint bijection in the category of sheaves.
 
 Recall that to show $f^{-1}$ is a left adjoint to $f_*$ it suffices to
 define unit and counit natural transformations
-$\eta:f^{-1}f_*\to1_{\mathscr{PSh}_Y}$ and $\epsilon:1_{\mathscr{PSh}_X}
-\to f_*f^{-1}$, and show that for any $\mathscr{F}\in\mathscr{PSh}_X$ and
-$\mathscr{G}\in\mathscr{PSh}_Y$ we have
+$\epsilon:f^{-1}f_*\to1_{\text{PSh}_X}$ and $\eta:1_{\text{PSh}_Y}
+\to f_*f^{-1}$, and show that for any $\mathscr{F}\in\text{PSh}_X$ and
+$\mathscr{G}\in\text{PSh}_Y$ we have
 $f_*\epsilon_{\mathscr{F}}\circ\eta_{f_*\mathscr{F}}=1_{f_*\mathscr{F}}$ and
 $\epsilon_{f^{-1}\mathscr{G}}\circ
 f^{-1}\eta_{\mathscr{G}}=1_{f^{-1}\mathscr{G}}.$
@@ -438,10 +442,13 @@ f^{-1}f_*\mathcal{F}(U)
 &=\varinjlim_{V\supset f(U)}\mathcal{F}(f^{-1}(V)).
 \end{aligned}
 $$
-Therefore we have the natural map $f^{-1}f_*\mathcal{F}(U)\to \mathcal{F}(U)$
+Therefore we have a natural map $f^{-1}f_*\mathcal{F}(U)\to \mathcal{F}(U)$
 defined by $[(s,\mathcal{F}(f^{-1}(V)))]\mapsto s|_{U}].$ This collection of
-maps defines a map of presheaves, as restriction on each sheaf commutes,
-and hence a map of sheaves after sheaffification.
+maps defines a map of presheaves, as restriction on each presheaf commutes.
+For a given presheaf $\mathscr{F}$ on $X$ we will denote this map as
+$\epsilon_{\mathscr{F}}:f^{-1}f_*\mathscr{F}\to\mathscr{F}$.
+The collection of presheaf maps
+will define our counit natural transformation $\epsilon$.
 
 Next, we explcitly write out
 $$
@@ -452,20 +459,100 @@ $$
 $$
 Since $U\supset f(f^{-1}(U))$ we have the natural map $\mathscr{G}(U)\to
 f_*f^{-1}\mathscr{G}(U)$ defined by $s\mapsto [(s,\mathscr{G}(U))].$ Again this
-commutes with restriction and hence defines a map of presheaves and hence
-sheaves after sheaffification.
+commutes with restriction and hence defines a map of presheaves.
+Again for a given (pre)sheaf $\mathscr{G}$ on
+$Y$ we will denote the this map as $\eta_{\mathscr{G}}:\mathscr{G}\to
+f_*f^{-1}\mathscr{G}$ and this collection of presheaf maps will define our
+unit natural transformation $\eta$.
 
-Now we must show that these maps give us a bijection between
-$\text{Hom}(\mathscr{G},f_*\mathscr{G})$ and
-$\text{Hom}(f^{-1}\mathscr{G},\mathscr{F}).$
+It is routine to verify that $\epsilon,\eta$ defined above are natural
+transformations. Let us work this out explicitly for $\epsilon$. If
+$\varphi:\mathscr{F}_1\to\mathscr{F}_2$ is a map of presheaves on $X$ then
+we need to show that the following diagram commutes:
+$$
+\xymatrix{
+    f^{-1}f_*\mathscr{F}_1(U) \ar[r]^{\epsilon_{\mathscr{F}_1}(U)}
+    \ar[d]^{(f^{-1}f_*\varphi)(U)}
+        & \mathscr{F}_1(U) \ar[d]^{\varphi(U)}\\
+    f^{-1}f_*\mathscr{F}_2(U) \ar[r]^{\epsilon_{\mathscr{F}_2}(U)}
+        & \mathscr{F}_2(U)
+}
+$$
+Tracing a particular element $[(s,f^{-1}(V))]\in f^{-1}f_*\mathscr{F}_1(U)$,
+with $U\subset X$ open,
+through the diagram we find
+$$
+\xymatrix{
+    [(s,f^{-1}(V)] \ar[r]
+    \ar[d]
+        & s|_U \ar[d]\\
+    [(\varphi(f^{-1}(V))(s),f^{-1}(V))] \ar[r]
+        & \varphi(U)(s|_U)
+}
+$$
+since $\varphi(f^{-1}(V))(s)|_U=\varphi(U)(s|_U)$ by the commutativity of
+presheaf maps with presheaf restriction. A similar diagram chase shows that
+$\eta$ is also a natural transformation.
 
-Suppose that $\varphi:\mathscr{G}\to f_*\mathscr{F}$ is a morphism of sheaves.
-Applying $f^{-1}$ we have a map $f^{-1}\mathscr{G}\to
-f^{-1}f_*\mathscr{F}.$ Composing with the natural map $f^{-1}f_*\mathscr{F}$
-defined above gives us a map $f^{-1}\varphi: f^{-1}\mathscr{G}\to\mathscr{F}.$
-Applying $f_*$ we then obtain a map $f_*f^{-1}\mathscr{G}\to f_*\mathscr{F}$
-and then, after composing with the natural map $\mathscr{G}\to f_*f^{-1}
-\mathscr{G}.$
+It now remains to show that for any presheaf $\mathscr{F}$ on $X$ and
+any presheaf $\mathscr{G}$ on $Y$ we have
+$f_*\epsilon_{\mathscr{F}}\circ\eta_{f_*\mathscr{F}}=1_{f_*\mathscr{F}}$ and
+$\epsilon_{f^{-1}\mathscr{G}}\circ
+f^{-1}\eta_{\mathscr{G}}=1_{f^{-1}\mathscr{G}}.$
+Again diagram chasing suffices. Let $s\in
+f_*\mathscr{F}(U)=\mathscr{F}(f^{-1}(U))$ for $U\subset Y$ open. We have a map
+$$
+    f_*\mathscr{F}\overset{\eta_{f_*\mathscr{F}}}{\to}
+    f_*f^{-1}f_*\mathscr{F}\overset{f_*\epsilon_{\mathscr{F}}}{\to}
+    f_*\mathscr{F}.
+$$
+Diagram chasing we find that (the maps below should technically
+have $``(U)"$ in front of
+them to indicate that they are the local maps, but this was omitted to
+attempt to make things less cluttered)
+$$
+\begin{aligned}[t]
+    (f_*\epsilon_{\mathscr{F}})(\eta_{f_*\mathscr{F}}(s))
+        &= (f_*\epsilon_{\mathscr{F}})\left([(s,U)]\right)\\
+        &= s|_U.
+\end{aligned}
+$$
+If this is not clear it might help to work it out
+explicitly and understand the object $f_*f^{-1}f_*\mathscr{F}$ as
+$$
+\begin{aligned}[t]
+f_*f^{-1}f_*\mathscr{F} &= f^{-1}f_*\mathscr{F}(f^{-1}(U))\\
+    &= \varinjlim_{V\supseteq f(f^{-1}(U))}f_*\mathscr{F}(V)\\
+    &= \varinjlim_{f^{-1}(V)\supseteq f^{-1}(f(f^{-1}(U)))}\mathscr{F}(f^{-1}(V))\\
+    &=  \varinjlim_{f^{-1}(V)\supseteq f^{-1}(U)}\mathscr{F}(f^{-1}(V)).
+\end{aligned}
+$$
+Next, we have the sequence of maps
+$$
+    f^{-1}\mathscr{G}\overset{f^{-1}\eta_{\mathscr{G}}}{\to}
+        f^{-1}f_*f^{-1}\mathscr{G}\overset{\epsilon_{f^{-1}\mathscr{G}}}{\to}
+        f^{-1}\mathscr{G}.
+$$
+Again a diagram chase shows us that for $[(s,V)]\in
+f^{-1}\mathscr{G}(U)=\varinjlim_{V\supseteq f(U)}\mathscr{G}(V)$, with
+$U\subset X$ open, we have
+$$
+    \begin{aligned}[t]
+        \epsilon_{f^{-1}\mathscr{G}}((f^{-1}\eta_{\mathscr{G}})([(s,V)]))
+            &= \epsilon_{f^{-1}\mathscr{G}}([([(s,V)], U])\\
+            &= [(s,V)].
+    \end{aligned}
+$$
+It may help to understand the object $f^{-1}f_*f^{-1}\mathscr{G}(U)$
+explicitly as
+$$
+\begin{aligned}[t]
+    f^{-1}f_*f^{-1}\mathscr{G}(U) &=
+        \varinjlim_{V\supset f(U)}\left(f_*f^{-1}\mathscr{G}(V)\right)\\
+        &= \varinjlim_{V\supseteq f(U)}\left(
+            \varinjlim_{W\supseteq f(f^{-1}(V))}\mathscr{G}(W)\right).
+\end{aligned}
+$$
 </div>
 
 **1.19.** *Extending a Sheaf by Zero.*

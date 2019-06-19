@@ -46,7 +46,7 @@ Let $q=x+yi=zj+wij.$ Computing we find that
 $$
     q^2=(x^2+y^2a+z^2b-w^2ab)+2xyi+2xzj+2xwij.
 $$
-Therefore $q^2=0$ if and only if $x=0$ or $y=z=w=0.$
+Therefore $q^2=\in k^*$ if and only if $x=0$ or $y=z=w=0.$
 </div>
 
 **1.6.** Let $\varphi:(c,d)\to (a,b)$ be an isomorphism. Take $i,j\in (a,b)$

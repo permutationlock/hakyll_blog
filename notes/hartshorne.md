@@ -443,7 +443,7 @@ f^{-1}f_*\mathcal{F}(U)
 \end{aligned}
 $$
 Therefore we have a natural map $f^{-1}f_*\mathcal{F}(U)\to \mathcal{F}(U)$
-defined by $[(s,\mathcal{F}(f^{-1}(V)))]\mapsto s|_{U}].$ This collection of
+defined by $[(s,\mathcal{F}(f^{-1}(V)))]\mapsto s|_{U}.$ This collection of
 maps defines a map of presheaves, as restriction on each presheaf commutes.
 For a given presheaf $\mathscr{F}$ on $X$ we will denote this map as
 $\epsilon_{\mathscr{F}}:f^{-1}f_*\mathscr{F}\to\mathscr{F}$.

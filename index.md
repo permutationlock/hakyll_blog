@@ -24,8 +24,9 @@ Outside of math I like hiking and cycling, and I have been trying to
 learn chess. I also follow the pro scenes for StarCraft 2 and League of
 Legends.
 
-### Arithmetic geometry
+### Reading on arithmetic geometry
 
+ - [Grothendieck bio by Colin McLarty](https://www.landsburg.com/grothendieck/mclarty1.pdf)
  - [David Zureick-Brown's advice](http://www.mathcs.emory.edu/~dzb/adviceArithmeticGeometry.html)
  - [Amost Turchet introductory article](http://sites.math.washington.edu/~aturchet/Index%20Folder/invitation.pdf)
  - [Alex Youcis' introductory post](https://ayoucis.wordpress.com/2017/10/02/a-fun-enough-talk/#more-12081)

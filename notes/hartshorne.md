@@ -128,6 +128,30 @@ Since $\mathscr{F}'\hookrightarrow\mathscr{F}$ we may identify $\mathscr{F}'$
 with a subsheaf of $\mathscr{F}.$ Thus by (a) we have
 $\mathscr{F}''\cong\mathscr{F}/\mathscr{F}'.$
 
+**Lemma 3.** Suppose that $\mathscr{F}$ is a sheaf, $\mathscr{P}$ is a
+presheaf, and $\varphi:\mathscr{F}\to\mathscr{P}$ is a map of presheaves. Then
+we naturally have a map of sheaves $\varphi^+:\mathscr{F}\to\mathscr{P}^+$ and
+$\text{ker}(\varphi^+)=(\text{ker}(\varphi))^+$.
+
+\begin{proof}
+The map $\varphi^+:\mathscr{F}\to\mathscr{P}^+$ is simply given by the
+composition $\theta\circ\varphi$ where $\theta:\mathscr{P}\to\mathscr{P}^+$ is
+the unique map given by sheafification. It is immediate that
+$\text{ker}(\varphi)\subseteq\text{ker}(\varphi^+)$ and hence
+$(\text{ker}(\varphi))^+\subseteq\text{ker}(\varphi^+)$. Thus it remains to
+show the reverse inclusion.
+
+Suppose that $s\text{ker}(\varphi^+)(U)$. Then $\varphi^+(s)_P=0$ for all
+$P\in U$. By the definition of $\mathscr{P}^+$ and $\theta$, this implies
+that $\varphi(s)_P=0$ for all $P\in U$ (recall $\theta$ sends a section
+$t\in\mathscr{P}(U)$ to the function $U\to\bigcup_{P\in U}\mathscr{P}_P$ given
+by $Q\mapsto t_Q$). This implies that for each $P\in U$ there exists an open
+neighborhood $V_P$ of $P$ in $U$ such that $\varphi(s)|_{V_P}=0$. This implies
+that $s_{V_P}\in\text{ker}(\varphi)$ for each $P\in U$. Therefore
+$s\in(\text{ker}(\varphi))^+$ as it is results from gluing the collection of
+sections $\{s_{V_P}\}$ over the open cover $\{V_P\}$.
+\end{proof}
+
 **1.7.a.** Observe that by Exercise 1.6.a we have an exact sequence
 $$
     0\to\text{ker}(\varphi)\to\mathscr{F}\to\text{im}(\varphi)\to 0.
@@ -136,8 +160,28 @@ Thus by Exercise 1.6.b we have $\text{im}\varphi\cong\mathscr{F}/\text{ker}
 \varphi.$
 
 **1.7.b.**
-This also follows immediately from Exercise 1.6, or by noting that the stalks
-are isomorphic.
+Let $\text{im}^{p},\text{coker}^{p}$ be the presheaf image and cokernel,
+respectively.
+By definition, for each open $U\subset X$ we have an exact sequence
+$$
+    0\to\text{im}^{p}(\varphi)(U)\to\mathscr{G}(U)\to\text{coker}^{p}(\varphi)(U)\to 0,
+$$
+and hence an "exact sequence of presheaves"
+$$
+    0\to\text{im}^{p}(\varphi)\to\mathscr{G}\to\text{coker}^{p}(\varphi)\to 0.
+$$
+By exercise 1.4.a we see that
+$$
+    0\to\text{im}(\varphi)\to\mathscr{G}
+$$
+is exact after sheafifying $\text{im}^p(\varphi)$. Finally, by Lemma 3 above,
+we have that the sheafification of $\text{im}^p$ is the kernel of the natural
+map from $\mathscr{G}\to\text{coker}(\varphi)$. Thus we have the exact sequence
+$$
+    0\to\text{im}(\varphi)\to\mathscr{G}\to\text{coker}(\varphi)\to 0.
+$$
+Part (a) therefore implies that
+$\text{coker}(\varphi)\cong\mathscr{G}/\text{im}(\varphi)$.
 
 **1.1.8.** Suppose that
 $$
@@ -159,7 +203,7 @@ $0\to\mathscr{F}'(U)\to\mathscr{F}(U)$ is exact for each $U.$
 
 It remains to show that $\text{im}(\varphi(U))=\text{ker}(\psi(U))$ for any
 opens subset $U.$ Observe that by the exact sequence of sheaves we have that
-$\text{im}(\varphi)=\text{ker}(\psi)$ (by Corollary 2 below we may view
+$\text{im}(\varphi)=\text{ker}(\psi)$ (by Corollary 2 above we may view
 $\text{im}(\varphi)$ as a subsheaf of $\mathscr{F}$ and then the surjectivity of
 the maps
 $\varphi_x:\mathscr{F}_x'\to\text{ker}(\psi)_x$ gives us that
@@ -557,28 +601,96 @@ $$
 
 **1.19.** *Extending a Sheaf by Zero.*
 
-**1.19.a.**
+**1.19.a.** Let $P\in\mathbb{Z}$. Observe that the open subsets of $Z$
+containing $P$ are exactly the subsets of the form $i^{-1}(V)=V\cap Z$
+where $U$ is an open subset of $X$. Thus $i_*(\mathca{F})_P=\mathcal{P}$.
 
-**1.19.b.**
+Suppose that $P\not\in\mathbb{Z}$. Let $s\in i_*(\mathcal{F})(V)$ for some $U$
+containing $P$. Then $V\cap U$ is also an open set containing $P$ and
+$s|_{V\cap U}=0$. Thus $i_*(\mathcal{F})_P=0$.
 
-**1.19.c.**
+**1.19.b.** Observe that the open subets of $U$ are exactly the open subsets of
+$X$ contained in $U$. Thus $j_!(\mathcal{F})_P=\mathcal{F}_P$ for $P\in U$. If
+$P\not\in U$ then no open subset containing $P$ is contained in $U$. Thus
+$j_!(\mathcal{F})_P=0$.
+
+**1.19.c.** Observe by parts (a) and (b) for each $P\in X$ we have an exact
+sequence of stalks
+$$
+    0\to j!(\mathcal{F}|_{U})_P\to\mathcal{F}_P\to i_*(\mathcal{F}|_U)_P\to 0.
+$$
+Thus the result follows by the fact that exactness on stalks is equivalent
+exactness of sheaves.
 
 **1.20.** *Subsheaf with Supports*
 
-**1.20.a.**
+**1.20.a.** Suppose we have a cover $\{V_{\alpha}\}$ of an open set $V\subet X$
+and $s_{\alpha}\in\mathcal{H}_Z^0(\mathcal{F})(V_{\alpha})$ such that
+$s_{\alpha}|_{V_\alpha\cap V_\beta}=s_{\beta}|_{V_\alpha\cap V_\beta}$ for all
+$\alpha,\beta$. Then since $\mathacl{F}$ is a sheaf there exists an
+$s\in\mathcal{F}(V)$ such that $s|_{V_\alpha}=s_\alpha$ for all $\alpha$. In
+particular, $\text{Supp}(s)=\bigcup \text{Supp}(s_{\alpha})\subet Z$. So
+$s\in\mathcal{H}_Z^0(\mathcal{F})(V)$.
 
-**1.20.b.** 
+**1.20.b.** Let $s\in\mathcal{F}(V)$ for some open $V\subset X$. Observe that
+$s\mapsto s|_{j^{-1}(V)}\in j_*(\mathcal{F}|_{U})$. Since $j^{-1}(V)=V\cap U$,
+$s\mapsto 0$ if and only if $\text{Supp}(s)\subset V\setminus U=V\cap Z$, that
+is, if and only if $s\in\mathcal{H}_Z^0(\mathcal{F})(V)$.
+
+If $\mathcal{F}$ is flasque, then the restricton map $\mathcal{F}(V)\mapsto
+\mathcal{F}(V\cap U)=j_*(\mathcal{F}|_U)(V)$ is surjective. Thus the map
+$\mathcal{F}\to j_*(\mathcal{F}|_U)$ is surjective.
 
 **1.21.** *Some Examples of Sheaves on Varieties.* 
 
-**1.21.a.** 
+**1.21.a.** By a similar argument to exercise 1.20.a it is easy to see that
+$\mathscr{I}_Y$ is a sheaf: sections in $\mathcal{O}_X$ with support in
+$Y$ always glue to sections with support in $Y$.
 
-**1.21.b.**
+**1.21.b.** Recall that $\mathcal{O}_Y=\mathcal{O}_X|_Y$. Let $U=X\setminus Y$.
+If we show that $\mathscr{I}_Y=j_{!}(\mathscr{X}|_{U})$ then the result follows
+by exercise 1.19.c. By exercise 1.19.b. it suffices to show that
+$\mathscr{I}_{Y,P}=\mathscr{O}_{X}|_{P}$ for $P\not\in Y$ and
+$\mathscr{I}_{Y,P}=0$
+for $P\in Y$.
 
-**1.21.c.**
+Suppose that $P\in Y$. Let $s\in\mathscr{I}_Y(V)$ for some open $V$ containing
+$P$. Note that $\text{Supp}(s)$ is a closed subset of $V$ disjoint from $Y$, and thus
+$W=V\setminus\text{Supp}(s)$ is an open set containing $P$ such that $s|_W=0$.
+Thus $\mathscr{I}_{Y,P}=0$. Conversely, if $P\not\in Y$, then a similar
+argument to exercise 1.19.b shows that $\mathscr{I}_{Y,P}=\mathscr{O}_{X,P}$.
 
-**1.21.d.** 
+**1.21.c.** Observe that the given sequence is exact on the stalks by our
+observations about the stalks of $\mathscr{I}_Y$ in part (b) above.
 
-**1.21.e.** 
+**1.21.d.** By the definition of $\mathscr{O}_X$ we have
+$\mathscr{O}_X(U)\subseteq K(X)$ for each $U$. Therefore there is an injection
+$\varphi:\mathscr{O}_X\hookrightarrow\mathscr{K}$ given locally by sending
+$s\in\mathscr{O}_X(U)$ to the constant map $U\mapsto \{s\}\subset K(X)$
+in $\mathscr{K}(U)$. Therefore we have an exact sequence
+$$
+0\to\mathscr{O}_X\to\mathscr{K}\to\mathscr{K}/\mathscr{O}_X\to 0.
+$$
+It suffices to show that for any $P\in X$ we have $\mathscr{K}_P= K(X)$.
+Suppose that $U$ is an open neighborhood of $P$ and $s\in\mathscr{K}(U)$. By
+continuity, $V=s^{-1}(s(P))$ is an open neighborhood of $P$. Therefore $s|_V$
+is constant. Hence $\mathscr{K}_P=K(X)$.
+
+**1.21.e.** Observe that the map $\mathscr{K}\to\mathscr{K}/\mathscr{O}_X\cong
+\sum_{P\in X}i_P(I_P)$ is
+given by $s\mapsto\sum_{P\in X} s(P)+\mathscr{O}_P$. Therefore
+$s\in\Gamma(X,\mathscr{K})$ is such that $s\mapsto 0$ if
+and only if $s\in\mathscr{O}_P$ for all $P\in X$, i.e., if and only if
+$s\in\Gamma(X,\mathscr{O}_X)$. Thus the sequence of global sections is exact at
+$\Gamma(X,\mathscr{K})$.
+
+It remains to show that the map
+$\text{Gamma}(X,\mathscr{K})\to\text{Gamma}(X,\mathscr{K}/\mathscr{O}_X)$ is
+surjective. By part (d) we have that
+$\text{Gamma}(X,\mathscr{K}/\mathscr{O}_X)=\sum_{P\in X} K(X)/\mathscr{O}_P$. Thus
+a nonzero global section $s\in\text{Gamma}(X,\mathscr{K}/\mathscr{O}_X)$
+is a tuple $(s_{P})_{P\in X}$ such that $s_{P}\in\mathscr{O}_P$ for all but
+finitely many points $P_1,\ldots,P_r$. Let $s_{P_i}=f_i/g_i\in
+K(X)\setminus\mathscr{O}_{P_i}$.
 
 **1.22.** *Glueing Sheaves.*

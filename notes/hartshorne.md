@@ -21,7 +21,7 @@ continuous functions from $U\to \bigcup_{P\in X}\mathscr{F}_P.$ Note
 $\mathscr{F}_x=A.$ Suppose that $f:U\to\bigcup_{P\in X}\mathscr{F}_P$ is a
 function such that for each $P\in U$ there exists a neighborhood
 $V_P$ of $P$ such that $t^P\in \mathscr{F}(V_P)=A$ with
-$t^P_Q=f(Q)$ for all $Q\in V_P.$ But $t^P_Q=t^P\in A$.
+$t^P_Q=f(Q)$ for all $Q\in V_P.$ But $t^P_Q=t^P\in A.$
 Thus in fact $f$ is a continuous function from $U\to A$ and addition works as
 wexpected. So $\mathscr{F}$ is the constant sheaf described in example 1.0.3.
 
@@ -129,7 +129,7 @@ If a morphism $\varphi:\mathscr{F}\to\mathscr{G}$ is bijective, then
 $\varphi(U):\mathscr{F}(U)\to\mathscr{G}(U)$ is bijective for each
 $U\subseteq X$ (see [Eisenbud exercise I-9](/notes/eisenbud_harris.html)).
 Thus $\varphi(U)$ is a group (ring, module, etc.) isomorphism
-for each $U$.
+for each $U.$
 Thus we may define an inverse morphism $\varphi^{-1}$ by taking
 $\varphi^{-1}(U)=(\varphi(U))^{-1}.$ It easily follows that this is a morphism
 of sheaves and it is clearly the inverse of $\varphi.$
@@ -329,18 +329,17 @@ for $r\in\mathbb{R}$ define
 $\mathscr{Z}_{r}$ to be the skyscraper sheaf of $\mathbb{Z}$ over the point
 $r.$ Then take $\mathscr{F}=\bigoplus_{n\in\mathbb{N}}\mathscr{Z}_{1/n}$ where
 the infinite direct sum sheaf is defined to be the sheafification of the presheaf
-infinite direct sum. Observe that on the presheaf infinite direct product
-any section section over an open set $U$
-has a finite number of points in its support. Since
-sheafification does not change the stalks, this implies that for each open set
-$U\subset X$ each section in
-$s\in\mathscr{F}(U)$ has finite support. Therefore
+infinite direct sum $\mathscr{P}.$ Observe that on the presheaf infinite direct product
+$\mathscr{P}$
+any section section $s\in\mathscr{P}(U)$
+has a finite number of points in its support. Therefore
 for any $r\ne 1/n$ for $n\in\mathbb{N}$ the stalk
-$\mathscr{F}_r$ is $0$ since given any section $s\in\mathscr{F}(U)$ with $U$ a
-neighborhood of $0$, we may choose a smaller open neighborhood $V\subset U$
+$\mathscr{P}_r$ is $0$ since given any section $s\in\mathscr{P}(U)$ with $U$ a
+neighborhood of $r,$ we may choose a smaller open neighborhood $V\subset U$
 such that the support of $s$ does not lie in $V$ and hence $s|_V=0.$ Thus
-$\mathscr{F}_r=0$ if $r\not\in\{1/n \, : \, n\in\mathbb{N}\}$ and
-$\mathscr{F}_{1/n}=\mathbb{Z}$ for each $n\in\mathbb{N}.$ So
+$\mathscr{P}_r=0$ if $r\not\in\{1/n \, : \, n\in\mathbb{N}\}$ and
+$\mathscr{P}_{1/n}=\mathbb{Z}$ for each $n\in\mathbb{N}.$ Since sheafification
+does not change the stalks, the same holds for $\mathscr{F}.$ So
 $\text{Supp}(\mathscr{F})=\{1/n \, : \, n\in\mathbb{N}\}$ which is not closed
 in $X=\mathbb{R}.$
 
@@ -501,22 +500,38 @@ A_{\gamma}]$ where $\gamma\ge \alpha,\beta.$
 
 <div class="proof">
 For a given topological space $X$ let
-$\text{PSh}_X$ be the category of presheaves on $X.$
+$\text{PSh}_X$ be the category of presheaves on $X$ and let $\text{Sh}_X$ be
+the category of sheaves on $X.$
 
-We will show below that $f^{-1}$ without sheafification is a left adjoint to $f_*$
-in the category of presheaves. Thus there will be a bijection between
-the set of presheaf maps $\mathscr{G}\to f_*\mathscr{F}$ and the set of
-presheaf maps $f^{-1}\mathscr{G}\to\mathscr{F}.$ 
-Recall that for a sheaf $\mathscr{G}$ and a presheaf $\mathscr{F}$ there is a
-bijection between the set of presheaf maps $\mathscr{F}\to\mathscr{G}$ and the
-set of sheaf maps $\mathscr{F}^+\to\mathscr{G}$ where $\mathscr{F}^+$ is the
-sheafification of $\mathscr{F}.$ Thus after the sheafification of $f^{-1}$
-we will have the adjoint bijection in the category of sheaves. Therefore to
-show that $f^{-1}$ is a left adjoint to $f_*$ in the category of sheaves,
-it suffices
-to show the result in the category of presheaves.
+We will show below that $f^{-1}:\text{PSh}_Y\to\text{PSh}_X$
+without sheafification is a left adjoint to $f_*:\text{PSh}_X\to\text{PSh}_Y.$
+Thus for every $\mathscr{F}\in\text{PSh}_X$ and every
+$\mathscr{G}\in\text{PSh}_Y$ we will have a bijection
+$$
+    \text{Hom}_{PSh}(\mathscr{F},f^{-1}\mathscr{G})
+    \cong\text{Hom}_{PSh}(f_*\mathscr{F},\mathscr{G}).
+$$
+Recall that if $\mathscr{P}$ is a presheaf on $X$ and
+$\mathscr{G}$ is a sheaf on $X,$
+then we also have a bijection
+$$
+    \text{Hom}_{PSh}(\mathscr{P},\mathscr{G})
+    \cong\text{Hom}_{Sh}(\mathscr{P}^+,\mathscr{G}).
+$$
+Thus for any $\mathscr{F}\in\text{Sh}_X$ and $\mathscr{G}\in\text{Sh}_Y,$
+the result on presheaves gives us a
+bijection
+$$
+    \text{Hom}_{Sh}(\mathscr{F},f^{-1}\mathscr{G})
+    \cong
+    \text{Hom}_{Sh}(f_*\mathscr{F},\mathscr{G}).
+$$
+Therefore it in fact suffices to
+show that $f^{-1}:\text{PSh}_Y\to\text{PSh}_X$
+without sheafification is a left adjoint to
+$f_*:\text{PSh}_X\to\text{PSh}_Y.$
 
-Recall that to show $f^{-1}$ is a left adjoint to $f_*$ it suffices to
+Recall that to show $f^{-1}$ is a left adjoint to $f_*$ it is equivalent to
 define unit and counit natural transformations
 $\epsilon:f^{-1}f_*\to1_{\text{PSh}_X}$ and $\eta:1_{\text{PSh}_Y}
 \to f_*f^{-1},$ and show that for any $\mathscr{F}\in\text{PSh}_X$ and
@@ -590,29 +605,31 @@ any presheaf $\mathscr{G}$ on $Y$ we have
 $f_*\epsilon_{\mathscr{F}}\circ\eta_{f_*\mathscr{F}}=1_{f_*\mathscr{F}}$ and
 $\epsilon_{f^{-1}\mathscr{G}}\circ
 f^{-1}\eta_{\mathscr{G}}=1_{f^{-1}\mathscr{G}}.$
-Again diagram chasing suffices. Let $s\in
-f_*\mathscr{F}(U)=\mathscr{F}(f^{-1}(U))$ for $U\subseteq Y$ open. We have a map
+Again diagram chasing will suffice. We have a sequence of maps
 $$
     f_*\mathscr{F}\overset{\eta_{f_*\mathscr{F}}}{\to}
     f_*f^{-1}f_*\mathscr{F}\overset{f_*\epsilon_{\mathscr{F}}}{\to}
     f_*\mathscr{F}.
 $$
-Diagram chasing we find that (the maps below should technically
-have $``(U)"$ in front of
-them to indicate that they are the local maps, but this was omitted to
-attempt to make things less cluttered)
+Tracing through a particular element $s\in
+f_*\mathscr{F}(U)=\mathscr{F}(f^{-1}(U)),$ with $U\subseteq Y$ open,
+we find
 $$
 \begin{aligned}[t]
     (f_*\epsilon_{\mathscr{F}})(\eta_{f_*\mathscr{F}}(s))
         &= (f_*\epsilon_{\mathscr{F}})\left([(s,U)]\right)\\
-        &= s|_U.
+        &= s|_U\\
+        &= s.
 \end{aligned}
 $$
-If this is not clear it might help to work it out
-explicitly and understand the object $f_*f^{-1}f_*\mathscr{F}$ as
+Note that the maps above should technically
+have $``(U)"$ in front of
+them to indicate that they are the local maps, but this was omitted to
+attempt to make things less cluttered.
+The above follows from an explicit description of $f_*f^{-1}f_*\mathscr{F}$ as
 $$
 \begin{aligned}[t]
-f_*f^{-1}f_*\mathscr{F} &= f^{-1}f_*\mathscr{F}(f^{-1}(U))\\
+f_*f^{-1}f_*\mathscr{F}(U) &= f^{-1}f_*\mathscr{F}(f^{-1}(U))\\
     &= \varinjlim_{V\supseteq f(f^{-1}(U))}f_*\mathscr{F}(V)\\
     &= \varinjlim_{f^{-1}(V)\supseteq f^{-1}(f(f^{-1}(U)))}\mathscr{F}(f^{-1}(V))\\
     &=  \varinjlim_{f^{-1}(V)\supseteq f^{-1}(U)}\mathscr{F}(f^{-1}(V)).
@@ -634,8 +651,8 @@ $$
             &= [(s,V)].
     \end{aligned}
 $$
-It may help to understand the object $f^{-1}f_*f^{-1}\mathscr{G}(U)$
-explicitly as
+The above follows from an explicit descriptin of the object
+$f^{-1}f_*f^{-1}\mathscr{G}(U)$ as
 $$
 \begin{aligned}[t]
     f^{-1}f_*f^{-1}\mathscr{G}(U) &=
@@ -723,7 +740,7 @@ Thus $\mathscr{I}_{Y,P}=0.$ Conversely, if $P\not\in Y,$ then a similar
 argument to exercise 1.19.b shows that $\mathscr{I}_{Y,P}=\mathscr{O}_{P}.$
 Thus the given sequence is exact on the stalks and hence exact. Note that the
 sequence of global sections is not exact since global sections of
-$\mathscr{O}_{\mathbb{P}^1}$ are just the constants $k$, and
+$\mathscr{O}_{\mathbb{P}^1}$ are just the constants $k,$ and
 $\mathscr{O}_P=\mathscr{O}_Q=k.$ There is no surjective map $k\to k^2.$
 
 
@@ -765,10 +782,10 @@ must show that for any function $f\in K$ and every
 $P\in X,$ there exists a function $g\in K$ such that $f-g\in\mathscr{O}_P$
 and $g\in\mathscr{O}_Q$ for all $Q\in X\setminus\{P\}.$
 
-By a linear automorphism of $\mathbb{P}^n$ we may ensure that $P=[0,1]$ (see
+By a linear automorphism of $\mathbb{P}^1$ we may ensure that $P=[0,1]$ (see
 my solutions to Fulton's curve book). Let us
 consider just the affine patch $\mathbb{A}^1$ given by $y\ne 0$ in
-$\mathbb{P}^1$, recalling that $K\cong k(x)=k(\mathbb{A}^1).$ Note that
+$\mathbb{P}^1,$ recalling that $K\cong k(x)=k(\mathbb{A}^1).$ Note that
 $P=0\in\mathbb{A}^1.$ Write
 $f=\frac{a(x)}{x^n b(x)}$ where $x\nmid a$ and $x\nmid b.$ If $n\le 0$ then $f$
 is regular at $P$ and therefore any constant function $f'\in k$ satisfies our

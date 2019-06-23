@@ -15,16 +15,27 @@ Here are my exercise solutions and notes for Hartshorne's *Algebraic Geometry*.
 ### Section 1: Sheaves
 
 **1.1.** Let $\mathscr{F}$ be the sheaf described above.
-Observe that $\mathscr{F}_x=A$ for each $x\in X.$ Therefore the sheafification
+Observe that $\mathscr{F}_P=A$ for each $P\in X.$ Therefore the sheafification
 of $\mathscr{F}$ is the sheaf such that $\mathscr{F}(U)$ is the set of
-continuous functions from $U\to \mathscr{F}_x=A,$ i.e., the constant sheaf
-$\mathscr{A}.$
+continuous functions from $U\to \bigcup_{P\in X}\mathscr{F}_P.$ Note
+$\mathscr{F}_x=A.$ Suppose that $f:U\to\bigcup_{P\in X}\mathscr{F}_P$ is a
+function such that for each $P\in U$ there exists a neighborhood
+$V_P$ of $P$ such that $t^P\in \mathscr{F}(V_P)=A$ with
+$t^P_Q=f(Q)$ for all $Q\in V_P.$ But $t^P_Q=t^P\in A$.
+Thus in fact $f$ is a continuous function from $U\to A$ and addition works as
+wexpected. So $\mathscr{F}$ is the constant sheaf described in example 1.0.3.
 
-**1.2.a.** Let $s_P\in\text{ker}(\varphi)_P.$ Then there exists open
+**1.2.a.** Let $s_P\in(\text{ker}(\varphi))_P.$ Then there exists open
 $U$ containing $P$ and
-$s\in\mathscr{F}(U)$ such that $\varphi(U)(s)=0.$ Thus
-$\varphi(s)_P=\varphi_P(s_P)=0.$ Moreover, if $s_P\in\text{ker}(\varphi_P),$
-then there exists an open $U$ containing $P$ such that $\varphi(U)(P)=0.$
+$s\in\mathscr{F}(U)$ with germ $s_P$ such that $\varphi(U)(s)=0.$ Thus
+$\varphi(s)_P=\varphi_P(s_P)=0.$ So $s_P\in\text{ker}(\varphi_P).$
+Next suppose that
+$s_P\in\text{ker}(\varphi_P).$ Then for some open neighborhood $U$ of
+$P$ we must have $s\in\mathscr{F}(U)$ with $s|_P$ and hence
+$\varphi(s)\in\mathscr{G}(U)$ such that $\varphi(s)|_P=\varphi_P(s)=0.$
+Thus there exists a neighborhood $V\subseteq U$ of $P$ such that
+$\varphi(s)|_V=0.$ So $\varphi(s|_V)=\varphi(s)|_V=0$ and $(s|_V)_P=s_P$
+and therefore $s_P\in(\text{ker}(\varphi))_P.$
 
 The argument follows similarly for images, or see the sheafification
 construction which explicitly constructs $\text{im}(\varphi)$ such that
@@ -33,7 +44,7 @@ $\text{im}(\varphi)_P=\text{im}(\varphi_P).$
 **1.2.b.** Note that $\text{ker}(\varphi)=0$ if and only if
 $\text{ker}(\varphi)_P=0$
 for all $P\in X.$ By part (a), this is true if and only if
-$\text{ker}(\varphi_P)$ for all $P,$ i.e., if the morphism is injective on
+$\text{ker}(\varphi_P)=0$ for all $P,$ i.e., if the morphism is injective on
 the stalks.
 
 Let $\varphi:\mathscr{F}\to\mathscr{G}$ be a morphism of sheaves. If
@@ -97,13 +108,18 @@ $z_1\in\mathscr{F}(U_P)$ and $z_2\in\mathscr{F}(U_Q)$ such that
 $\varphi(U_P)(z_1)=s|_{U_P}$ and $\varphi(U_Q)(z_2)=s|_{U_Q}.$ Thus $\varphi$
 is a surjective morphism despite the fact that $\varphi(X)$ is not surjective.
 
+**Accreditation.** The idea for this example comes from
+[stackexchange](https://math.stackexchange.com/a/58314).
+
 **1.4.a.**
-Suppose that $s,t\in\mathscr{F}^+(U)$ such that
-$\varphi^+(U)(s)=\varphi^+(U)(t).$ By the definition of the associated
-sheaf there exists an open cover $\{V_i\}$ of $U$ such that there exist
-$s_i,t_i\in\mathscr{F}(V_i)$ with $s_i=s|_{V_i},$ $t_i=t|_{V_i}.$ Thus
-$\varphi(s_i)=\varphi(t_i)$ for each $i.$ Hence $s_i=t_i$ for each $i$ and
-thus $s=t.$
+By exercise 1.2.a it suffices to show injectivity on the stalks.
+Observe that the maps $\theta_1:\mathscr{F}\to\mathscr{F}^+$ and
+$\theta_2:\mathscr{G}\to\mathscr{G}^+$ are bijective on stalks by definition.
+The map $\varphi:\mathscr{F}\to\mathscr{G}$ is also injective on stalks.
+Thus the map $\theta_2\circ\varphi:\mathscr{F}\to\mathscr{G}^+$ is
+injective on stalks and thus the induced map
+$\varphi^+:\mathscr{F}^+\to\mathscr{G}^+$ is
+injective on stalks as $\varphi^+\circ\theta_1=\theta_2\circ\varphi.$
 
 **1.4.b.**
 Already showed in Lemma 1 and Corollary 2 earlier.
@@ -111,7 +127,9 @@ Already showed in Lemma 1 and Corollary 2 earlier.
 **1.5.**
 If a morphism $\varphi:\mathscr{F}\to\mathscr{G}$ is bijective, then
 $\varphi(U):\mathscr{F}(U)\to\mathscr{G}(U)$ is bijective for each
-$U\subseteq X,$ i.e., $\varphi(U)$ is a group (ring, module, etc.) isomorphism.
+$U\subseteq X$ (see [Eisenbud exercise I-9](/notes/eisenbud_harris.html)).
+Thus $\varphi(U)$ is a group (ring, module, etc.) isomorphism
+for each $U$.
 Thus we may define an inverse morphism $\varphi^{-1}$ by taking
 $\varphi^{-1}(U)=(\varphi(U))^{-1}.$ It easily follows that this is a morphism
 of sheaves and it is clearly the inverse of $\varphi.$
@@ -197,7 +215,7 @@ $$
 is exact for each open $U\subseteq X.$ Equivalently, we must show that $\varphi(U)$
 is injective and that $\text{im}(\varphi(U))=\text{ker}(\psi(U)).$
 Observe that since $\varphi$ is injective, it immediately follows (from
-Eisenbud-Harris exercise I-$9$ for example) that
+[Eisenbud-Harris exercise I-9](/notes/eisenbud_harris.html)) that
 $\varphi(U):\mathscr{F}'(U)\to\mathscr{F}(U)$
 is injective for each $U\subseteq X.$ Thus
 $0\to\mathscr{F}'(U)\to\mathscr{F}(U)$ is exact for each $U.$
@@ -303,6 +321,29 @@ Suppose $Q\in U\setminus\text{Supp}(s).$ Then $s_Q=0$ so there exists an open
 neighborhood $V\subseteq U$ of $Q$ such that $s|_{V}=0.$ So $V\subseteq
 U\setminus\text{Supp}(s).$ Thus $\text{Supp}(s)$ is open.
 
+Let us also describe an example sheaf $\mathscr{F}$ such that
+$\text{Supp}(\mathscr{F})$ is not a closed set. This example was given by a
+fellow grad student
+Ahmad Mokhtar during a Hartshorne seminar at SFU. Let $X=\mathbb{R}$ and
+for $r\in\mathbb{R}$ define
+$\mathscr{Z}_{r}$ to be the skyscraper sheaf of $\mathbb{Z}$ over the point
+$r.$ Then take $\mathscr{F}=\bigoplus_{n\in\mathbb{N}}\mathscr{Z}_{1/n}$ where
+the infinite direct sum sheaf is defined to be the sheafification of the presheaf
+infinite direct sum. Observe that on the presheaf infinite direct product
+any section section over an open set $U$
+has a finite number of points in its support. Since
+sheafification does not change the stalks, this implies that for each open set
+$U\subset X$ each section in
+$s\in\mathscr{F}(U)$ has finite support. Therefore
+for any $r\ne 1/n$ for $n\in\mathbb{N}$ the stalk
+$\mathscr{F}_r$ is $0$ since given any section $s\in\mathscr{F}(U)$ with $U$ a
+neighborhood of $0$, we may choose a smaller open neighborhood $V\subset U$
+such that the support of $s$ does not lie in $V$ and hence $s|_V=0.$ Thus
+$\mathscr{F}_r=0$ if $r\not\in\{1/n \, : \, n\in\mathbb{N}\}$ and
+$\mathscr{F}_{1/n}=\mathbb{Z}$ for each $n\in\mathbb{N}.$ So
+$\text{Supp}(\mathscr{F})=\{1/n \, : \, n\in\mathbb{N}\}$ which is not closed
+in $X=\mathbb{R}.$
+
 **1.15.**
 Observe that if $\varphi,\psi:\mathscr{F}|_U\to\mathscr{G}|_U$ is a morphism
 then so are
@@ -312,6 +353,8 @@ for each open $U\subset V$ by $(\varphi+\psi)(V)
 Thus $\text{Hom}(\mathscr{F}|_U,\mathscr{G}|_U)$ is an
 abelian group with addition defined as above and the zero morphism as the
 identity.
+
+**1.16.** *Flasque sheaves.*
 
 **1.16.a.**
 Let us first recall that if $X$ is irreducible then any nonempty subset $U\subseteq X$ is
@@ -665,21 +708,24 @@ $\mathscr{F}\to j_*(\mathscr{F}|_U)$ is surjective.
 $\mathscr{I}_Y$ is a sheaf: sections in $\mathscr{O}_X$ with support in
 $Y$ always glue to sections with support in $Y.$
 
-**1.21.b.** Recall that $\mathscr{O}_Y=\mathscr{O}_X|_Y.$ Let $U=X\setminus Y.$
-If we show that $\mathscr{I}_Y=j_{!}(\mathscr{X}|_{U})$ then the result follows
-by exercise 1.19.c. By exercise 1.19.b. it suffices to show that
-$\mathscr{I}_{Y,P}=\mathscr{O}_{X}|_{P}$ for $P\not\in Y$ and
-$\mathscr{I}_{Y,P}=0$
-for $P\in Y.$
+**1.21.b.** Let $i:Y\to X$ be the inclusion map.
+Observe that we have a natural map of sheaves from
+$\mathscr{O}_X\to i_*(\mathscr{O}_Y)$ given by restriction of functions.
+Moreover, the kernel of this map is just those functions that vanish on $Y,$
+that is, the sheaf $\mathscr{I}_Y.$ Thus by exercise 1.7.a we have that
+$i_*(\mathscr{O}_Y)\cong\mathscr{O}_X/\mathscr{I}_Y.$
 
+**1.21.c.**
 Suppose that $P\in Y.$ Let $s\in\mathscr{I}_Y(V)$ for some open $V$ containing
 $P.$ Note that $\text{Supp}(s)$ is a closed subset of $V$ disjoint from $Y,$ and thus
 $W=V\setminus\text{Supp}(s)$ is an open set containing $P$ such that $s|_W=0.$
 Thus $\mathscr{I}_{Y,P}=0.$ Conversely, if $P\not\in Y,$ then a similar
-argument to exercise 1.19.b shows that $\mathscr{I}_{Y,P}=\mathscr{O}_{X,P}.$
+argument to exercise 1.19.b shows that $\mathscr{I}_{Y,P}=\mathscr{O}_{P}.$
+Thus the given sequence is exact on the stalks and hence exact. Note that the
+sequence of global sections is not exact since global sections of
+$\mathscr{O}_{\mathbb{P}^1}$ are just the constants $k$, and
+$\mathscr{O}_P=\mathscr{O}_Q=k.$ There is no surjective map $k\to k^2.$
 
-**1.21.c.** Observe that the given sequence is exact on the stalks by our
-observations about the stalks of $\mathscr{I}_Y$ in part (b) above.
 
 **1.21.d.** By the definition of $\mathscr{O}_X$ we have
 $\mathscr{O}_X(U)\subseteq K$ for each $U.$ Therefore there is an injection
@@ -718,5 +764,24 @@ direct product. That is, we
 must show that for any function $f\in K$ and every
 $P\in X,$ there exists a function $g\in K$ such that $f-g\in\mathscr{O}_P$
 and $g\in\mathscr{O}_Q$ for all $Q\in X\setminus\{P\}.$
+
+By a linear automorphism of $\mathbb{P}^n$ we may ensure that $P=[0,1]$ (see
+my solutions to Fulton's curve book). Let us
+consider just the affine patch $\mathbb{A}^1$ given by $y\ne 0$ in
+$\mathbb{P}^1$, recalling that $K\cong k(x)=k(\mathbb{A}^1).$ Note that
+$P=0\in\mathbb{A}^1.$ Write
+$f=\frac{a(x)}{x^n b(x)}$ where $x\nmid a$ and $x\nmid b.$ If $n\le 0$ then $f$
+is regular at $P$ and therefore any constant function $f'\in k$ satisfies our
+requirements. Suppose that $n>0.$ Since $x\nmid b$ we may construct a formal
+power series inverse to $b$ in which we will call $B^{-1}\in k[[x]].$ Let us
+take the first $n$ terms of the power series $aB^{-1}$ and call this $p(x).$ We
+then find that $x^n\mid (a(x)-p(x)b(x)).$ Thus if we define
+$f'=\frac{p(x)}{x^n}$ then $f-f'=\frac{a(x)-p(x)b(x)}{x^nb(x)}$ is regular at
+$P.$ Moreover, $f'$ is clearly regular at all points other than zero, including
+infinity.
+
+**Accreditation.** The idea to use a "power series inverse" style polynomial
+comes from the solution to this exercise in the solutions by
+Cutrone and Mashburn.
 
 **1.22.** *Glueing Sheaves.*

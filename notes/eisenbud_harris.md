@@ -83,10 +83,12 @@ $$
 $$
 But if $s\in\mathscr{F}(V)$ then $t=s|_{V\cap U}\in\mathscr{F}(V\cap U)$
 and $t_x=s_x$ for all $x\in U\cap V.$ So we in fact have
-\begin{align*}
+$$
+\begin{aligned}[t]
 \pi^{-1}(U) &=\{(x,s_x):x\in U, s\in\mathscr{F}(V)\text{ for some open } V\subseteq U\}\\
     &= \bigcup_{V\subseteq U}\bigcup_{s\in\mathscr{F}(V)}\mathscr{V}(V,s).
-\end{align*}
+\end{aligned}
+$$
 So $\pi^{-1}(U)$ is open and $\pi$ is continuous.
 
 Now we will show that $\sigma$ is a continuous section of $\pi$ over $U.$

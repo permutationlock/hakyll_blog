@@ -38,6 +38,18 @@ main = do
                     >>= loadAndApplyTemplate "templates/default.html" postCtx
                     >>= relativizeUrls
 
+        match "pages/*.md" $ do
+            route $ setExtension "html"
+            compile $ do
+                maybePreamble <- (getUnderlying
+                    >>= flip getMetadataField "header-includes")
+                pandocCompilerWithTransformM defaultHakyllReaderOptions
+                    defaultHakyllWriterOptions
+                    (renderFormulae $ formulaOptionsFromPreamble maybePreamble)
+                    >>= loadAndApplyTemplate "templates/post.html" postCtx
+                    >>= loadAndApplyTemplate "templates/default.html" postCtx
+                    >>= relativizeUrls
+
         match "notes/*.md" $ do
             route $ setExtension "html"
             compile $ do

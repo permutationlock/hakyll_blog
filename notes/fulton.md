@@ -3,12 +3,12 @@ documentclass: article
 title: Fulton
 geometry: margin=1in
 fontsize: 12pt
-published: June 16, 2019
+published: November 15, 2017
 header-includes: \usepackage{amsmath,amsthm,amssymb,mathrsfs}\usepackage[all]{xy}
 ...
 
 Here are my exercise solutions and notes for Fulton's
-*Algebraic Curves*.
+*Algebraic Curves*. These are very old, so keep that in mind.
 
 ### Chapter 1
 

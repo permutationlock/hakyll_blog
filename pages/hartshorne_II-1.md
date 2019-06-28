@@ -11,7 +11,7 @@ header-includes: \usepackage{amsmath,amsthm,amssymb,mathrsfs}\usepackage[all]{xy
 Observe that $\mathscr{F}_P=A$ for each $P\in X.$ Therefore the sheafification
 of $\mathscr{F}$ is the sheaf such that $\mathscr{F}(U)$ is the set of
 continuous functions from $U\to \bigcup_{P\in X}\mathscr{F}_P.$ Note
-$\mathscr{F}_x=A.$ Suppose that $f:U\to\bigcup_{P\in X}\mathscr{F}_P$ is a
+$\mathscr{F}_P=A.$ Suppose that $f:U\to\bigcup_{P\in X}\mathscr{F}_P$ is a
 function such that for each $P\in U$ there exists a neighborhood
 $V_P$ of $P$ such that $t^P\in \mathscr{F}(V_P)=A$ with
 $t^P_Q=f(Q)$ for all $Q\in V_P.$ But $t^P_Q=t^P\in A.$

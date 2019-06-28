@@ -172,7 +172,6 @@ generating set for $I(V)^T.$ Therefore $n-(m+1)+1=r$ and $m=n-r.$
 **Lemma 12.**
 Let $V$ be an algebraic set in $\mathbb{A}^n,$ and $L$ a linear
 subvariety of dimension $1.$ Then either $L\subset V$ or $V\cap L$ is finite.
-\end{lemma}
 
 <div class="proof">
 Suppose $L=V(X_2,\ldots,X_n).$ Let $F\in I(V).$ Note that $V\subset V(F).$

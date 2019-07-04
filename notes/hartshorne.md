@@ -12,3 +12,4 @@ Here are my exercise solutions and notes for Hartshorne's *Algebraic Geometry*.
 ### Chapter II
 
  - [Section 1](/pages/hartshorne_II-1.html)
+ - [Section 2](/pages/hartshorne_II-2.html)

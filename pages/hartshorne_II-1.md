@@ -245,7 +245,7 @@ respectively.
 
 Suppose $\mathscr{H}$ is a sheaf
 and $\varphi_1:\mathscr{H}\to\mathscr{F}$ and
-$\varphi_2:\mathscr{H}\to\mathscr{F}$ morphisms. Then observe that
+$\varphi_2:\mathscr{H}\to\mathscr{G}$ morphisms. Then observe that
 $\psi:\mathscr{H}\to\mathscr{F}\oplus\mathscr{G}$ defined by
 $\psi(U)=(i_1\circ\varphi_1)(U)\oplus
 (i_2\circ\varphi_2)(U)$ is a map satisfying $p_1\circ\psi=\varphi_1$ and
@@ -290,15 +290,15 @@ agree on intersections. Then for each projection map
 $\pi_k:\varprojlim\mathscr{F}_i(U)\to\mathscr{F}_k(U)$ the sections
 $\pi_k(s_\alpha)\in\mathscr{F}_k(U_\alpha)$ agree on intersections as well.
 Thus for each $k$ the sections $\pi_k(s_\alpha)$ glue to a section
-$s^k\in\mathscr{F}_k(U).$ Considering $\varprojlim\mathscr{F}_i(U)$ as
-the set
+$s^k\in\mathscr{F}_k(U).$ We may explicitly write
 $$
+    \varprojlim\mathscr{F}_i(U):=
     \left\{(a_i)\in\prod\mathscr{F}_i(U) : \varphi_{ij}(U)(a_i)=a_j \text{ for
     all } i,j\right\}
 $$
-where $\varphi_{ij}:\mathscr{F}_i\to\mathscr{F}_j$ are the maps of the directed
+with $\varphi_{ij}:\mathscr{F}_i\to\mathscr{F}_j$ the maps of the directed
 system of sheaves. Thus,
-since $\varphi_{ij}(s^i)=s^j$ for all $i,j,$ we have in fact constructed an element
+since $\varphi_{ij}(s^i)=s^j$ for all $i,j,$ above we in fact constructed an element
 $s=(s^k)\in\varprojlim\mathscr{F}_i(U).$ Moreover, $s|_{U_\alpha}=s_\alpha$ as
 desired. Thus $\varprojlim\mathscr{F}_i$ is a sheaf.
 
@@ -502,8 +502,8 @@ without sheafification is a left adjoint to $f_*:\text{PSh}_X\to\text{PSh}_Y.$
 Thus for every $\mathscr{F}\in\text{PSh}_X$ and every
 $\mathscr{G}\in\text{PSh}_Y$ we will have a bijection
 $$
-    \text{Hom}_{PSh}(\mathscr{F},f^{-1}\mathscr{G})
-    \cong\text{Hom}_{PSh}(f_*\mathscr{F},\mathscr{G}).
+    \text{Hom}_{PSh}(f^{-1}\mathscr{G},\mathscr{F})
+    \cong\text{Hom}_{PSh}(\mathscr{G},f_*\mathscr{F}).
 $$
 Recall that if $\mathscr{P}$ is a presheaf on $X$ and
 $\mathscr{G}$ is a sheaf on $X,$
@@ -517,9 +517,9 @@ the result on presheaves gives us that, when we consider $f^{-1}$ with
 sheafification, we have an adjoint
 bijection
 $$
-    \text{Hom}_{Sh}(\mathscr{F},f^{-1}\mathscr{G})
+    \text{Hom}_{Sh}(f^{-1}\mathscr{G},\mathscr{F})
     \cong
-    \text{Hom}_{Sh}(f_*\mathscr{F},\mathscr{G}).
+    \text{Hom}_{Sh}(\mathscr{G},f_*\mathscr{F}).
 $$
 Therefore it in fact suffices to
 show that $f^{-1}:\text{PSh}_Y\to\text{PSh}_X$
@@ -527,7 +527,7 @@ without sheafification is a left adjoint to
 $f_*:\text{PSh}_X\to\text{PSh}_Y.$
 
 Recall that to show $f^{-1}$ is a left adjoint to $f_*$ it is equivalent to
-define unit and counit natural transformations
+define counit and unit natural transformations
 $\epsilon:f^{-1}f_*\to1_{\text{PSh}_X}$ and $\eta:1_{\text{PSh}_Y}
 \to f_*f^{-1},$ and show that for any $\mathscr{F}\in\text{PSh}_X$ and
 $\mathscr{G}\in\text{PSh}_Y$ we have
@@ -691,7 +691,7 @@ Then clearly there is a
 map of presheaves from $\mathscr{P}\to\mathscr{G}$ that induces an isomorphism on
 the stalks. By sheafification we have a map of sheaves from
 $j_!(\mathscr{F})=\mathscr{P}^+\to\mathscr{G}.$ This sheaf map also induces an
-isomorphism on stalk
+isomorphism on the stalks
 $j_!(\mathscr{F})_P\cong\mathscr{G}_P$ for each $P\in X.$ Thus
 $j_!(\mathscr{F})\cong\mathscr{G}.$
 
@@ -792,8 +792,7 @@ $f'=\frac{p(x)}{x^n}$ then $f-f'=\frac{a(x)-p(x)b(x)}{x^nb(x)}$ is regular at
 $P.$ Moreover, $f'$ is clearly regular at all points other than zero, including
 infinity.
 
-**Accreditation.** The idea to use a "power series inverse" style polynomial
-comes from the solution to this exercise in the solutions by
+**Accreditation.** I was slightly lazy with part (e) and ended up finding
+the idea to use a "power series inverse" style polynomial
+in the solution to this exercise by
 Cutrone and Mashburn.
-
-**1.22.** *Glueing Sheaves.*

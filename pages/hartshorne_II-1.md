@@ -720,12 +720,26 @@ $\mathscr{F}\to j_*(\mathscr{F}|_U)$ is surjective.
 $\mathscr{I}_Y$ is a sheaf: sections in $\mathscr{O}_X$ with support in
 $Y$ always glue to sections with support in $Y.$
 
-**1.21.b.** Let $i:Y\to X$ be the inclusion map.
+**1.21.b.** Suppose that $X\subset\mathbb{P}^n$ is a quasiprojective variety
+and $Y$ a subvariety. Let $i:Y\to X$ be the inclusion map.
 Observe that we have a natural map of sheaves from
 $\mathscr{O}_X\to i_*(\mathscr{O}_Y)$ given by restriction of functions.
 Moreover, the kernel of this map is just those functions that vanish on $Y,$
-that is, the sheaf $\mathscr{I}_Y.$ Thus by exercise 1.7.a we have that
+that is, the sheaf $\mathscr{I}_Y.$ 
+If we now show that the map is surjectvie exercise 1.7.a gives us that
 $i_*(\mathscr{O}_Y)\cong\mathscr{O}_X/\mathscr{I}_Y.$
+
+Suppose that $s\in\mathscr{O}_Y(U)$ for some open set $U\subseteq Y.$
+Note that $U=V\cap Y$ for some open $V\subset X.$ Then for
+each $P\in U$ there exists an open set $U_P\subseteq U$ such that
+$s|_{U_P}=g_P/h_P$ for some $h_p,g_P\in k[x_0,\ldots,x_n].$ By
+possibly shrinking $U_P$ we may assume that
+$U_P\subseteq (U\setminus V(h_P)).$ We may also assume that $U_P=V_p\cap Y$ for some
+$V_p\subseteq (X\setminus V(h_P))$ open in $X.$ Therefore $g_P/h_P$ is a regular
+function on $V_P$, i.e. an element of $\mathscr{O}_X(V_p),$ and
+$g_P/h_P\mapsto s|_{U_P}$ under the map $\mathscr{O}_X(V_P)\to
+i_*(\mathscr{O}_Y)=\mathscr{O}_Y(U_P).$ Thus the map $\mathscr{O}_X\to
+i_*(\mathscr{O}_Y)$ is surjective by exercise 1.3a.
 
 **1.21.c.**
 Suppose that $P\in Y.$ Let $s\in\mathscr{I}_Y(V)$ for some open $V$ containing

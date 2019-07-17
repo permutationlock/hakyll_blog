@@ -141,3 +141,42 @@ injective, $t^x|_{V_x\cap V_y}=t^y|_{V_x\cap V_y}.$ Thus by the sheaf axiom
 there exists $t\in\mathscr{F}(U)$ such that $t|_{V_x}=t^x$ for each $x$, and
 hence
 $\varphi(U)(t)=s.$
+
+**I-13.**
+Suppose that $\{U_\alpha\}$ is an open cover of an open set $U\subseteq X$,
+and for each $\alpha$ we have $s^\alpha\in\mathscr{F}(U_\alpha)$ with the
+collection of sections satisfying the property that
+$s^\alpha|_{U_\alpha\cap U_\beta}=s^\beta|_{U_\alpha\cap U_\beta}$ for every
+$\alpha,\beta.$ We must show that there is a unique element
+$s\in\mathscr{F}(U)$ such that
+$s|_{U_\alpha}=s^\alpha.$ Note that
+$$
+    s^\alpha=(s^\alpha_{V})_{V\subset U,
+V\in\mathcal{B}}\in\varprojlim_{V\subset U,V\in\mathcal{B}}\mathscr{F}(V).
+$$
+
+Let $V\subset U$ be such that
+$V\in\mathcal{B}.$ Define a basic open cover of $V$
+$$
+    S=\{B\in\mathcal{B} \, : \,
+    B\subset V, B\subset U_\alpha \ \text{for some} \ \alpha\}.
+$$
+For each $B\in S$ we define a section $t_B\in\mathscr{F}(B)$ by picking some
+$\alpha$ such that $B\subset U_\alpha$ and defining
+$t_B=s^\alpha_B.$ Observe that this is well defined as if $B$ is also
+contained in another set in the cover $U_\beta$ the requirement that
+$s^\beta|_{U_\alpha\cap U_\beta}=s^\alpha|_{U_\alpha\cap U_\beta}$ ensures that
+$s^\beta_B=s^\alpha_B.$ Moreover, if $B_1,B_2\in S$ then for any basic open set
+$B_3\subset B_1\cap B_2$ a similar argument shows that
+$s_{B_1}|_{B_3}=s_{B_2}|_{B_2}.$
+
+Since $\mathscr{F}$ was a $\mathcal{B}$-sheaf,
+and $S$ was a cover of $U$ our argument above
+actually defines a section $s_B\in\mathscr{F}(B)$ for every basic open set
+$B\subseteq U$ (not just those in $S$) and these sections satisfy the condition
+that for any two basic open sets $B_1,B_2\subseteq U$
+the sections $s_{B_1}$ and $s_{B_2}$ restrict to the same section on any basic
+open set in their intersection. Therefore $s=(s_B)_{B\subset U,B\in\mathcal{B}}$
+is a well defined element of $\mathscr{F}(U)$ and by construction
+$s|_{U_\alpha}=s_\alpha.$ It is clear that this construction was unique and
+completely determined by the sections $s^\alpha.$

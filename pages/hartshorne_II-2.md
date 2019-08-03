@@ -80,10 +80,11 @@ $s|_{B_P}=t|_{B_P}.$ Therefore $s=t$ since $\mathscr{P}$ is a
 $\mathcal{B}$-sheaf.
 </div>
 
-**Corollary 2.** If $X$ is a topological space, $\mathscr{F}$ is a sheaf on
+**Corollary 2.** Suppose that $X$ is a topological space, $\mathscr{F}$ is a sheaf on
 $X,$ and $\mathscr{P}$ is a presheaf on $X$ that forms a $\mathcal{B}$-sheaf on
 some basis $\mathcal{B}$ of $X.$ If $f:\mathscr{P}\to\mathscr{F}$ is a map
-of $\mathcal{B}$-sheaves (i.e. a collection of maps $f(B)$ for each $B$
+of $\mathcal{B}$-sheaves (i.e. a collection of maps $f(B)$ for each
+$B\in\mathcal{B},$
 compatible with restrictions) such that $f(B)$ is an isomorphism for each
 $B\in\mathcal{B},$
 then there exists a induced map $\mathscr{P}^{+}\to\mathscr{F}$ that is
@@ -91,12 +92,41 @@ an isomorphism of
 sheaves.
 
 <div class="proof">
-We simply note that it suffices to define a map of sheaves on a basis. In our
+Recall that it suffices to define a map of sheaves on a basis. In our
 case we have a basis
 $\mathcal{B}$ and a collection of compatible isomorphisms
 $f(B):\mathscr{P}^{+}(B)\to\mathscr{F}(B)$ for each
-$B\in\mathcal{B},$ and therefore have an induced morphism of sheaves
+$B\in\mathcal{B},$ and therefore define an isomorphism of sheaves
 $\mathscr{P}^{+}\to\mathscr{F}.$
+</div>
+
+**Lemma 3.** Suppose that $g:\mathscr{F}\to\mathscr{G}$ and
+$h:\mathscr{F}\to\mathscr{H}$ are morphisms of sheaves such that $h$ is
+surjective and
+$\text{ker}(h)\subseteq\text{ker}(g).$ Then there exists a unique map of
+sheaves $f:\mathscr{H}\to\mathscr{G}$ such that $g=f\circ h.$
+
+<div class="proof">
+Observe that by
+exercise 1.7a we have that
+$\mathscr{F}/\text{ker}(g)\cong\text{im}(g)\subseteq\mathscr{G}$ and
+$\mathscr{F}/\text{ker}(h)\cong\mathscr{H}.$ Let
+$i_1:(\mathscr{F}/\text{ker}(g))^{\text{pre}}
+\to\mathscr{F}/\text{ker}(g)$ and
+$i_2:(\mathscr{F}/\text{ker}(h))^{\text{pre}}
+\to\mathscr{F}/\text{ker}(h)$ be the natural maps from each presheaf kernel to
+the corresponding kernel sheaf. Finally, let $h':\mathscr{F}\to
+(\mathscr{F}/\text{ker}(g))^{\text{pre}}$ be the intermediate map to the
+quotient sheaf.
+Since $\text{ker}(h)(U)\subseteq\text{ker}(g)(U)$ for each open set $U,$
+there clearly exists a
+map of presheaves
+$f':(\mathscr{F}/\text{ker}(h))^{\text{pre}}
+\to(\mathscr{F}/\text{ker}(g))^{\text{pre}}$
+such that $g=i_1 \circ f'\circ h'.$ By the universal property of
+sheafification, there exists a map
+$f:\mathscr{F}/\text{ker}(h)\to\mathscr{F}/\text{ker}(g)$ such that
+$f\circ i_2=i_1\circ f'.$ Therefore $g=f\circ i_2\circ h'=f\circ h.$
 </div>
 
 **2.3.a.** Suppose that $U\subseteq X$ is open and $s\in\mathcal{O}_X(U).$
@@ -300,3 +330,12 @@ f^{\#}(\text{Spec}(A)).$ Thus there is a bijection
 $$
     \text{Hom}(X,\text{Spec}(A))\cong\text{Hom}(A,\Gamma(X,\mathcal{O}_X)).
 $$
+
+**2.18.a.** Recall that the nilradical of $A$ is the intersection of all prime
+ideals in $A.$ Therefore $f$ is nilpotent if and only if $f$ is contained in
+all prime ideals of $A,$ i.e., if and only if $D(f)=\emptyset.$
+
+**2.18.b.** Let $g\in A.$ Then the map $f^{\#}(D(g)):\mathscr{O}_X(D(g))\to
+f_*\mathscr{O}_Y(D(g))$ is in fact the map $A_{g}\to B_{\varphi(g)}$ induced by
+$\varphi:A\to B.$ Therefore each of these maps is injective and hence $f^{\#}$
+is injective as a map of sheaves since it is injective on each basic open set.

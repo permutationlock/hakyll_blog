@@ -171,7 +171,7 @@ $B_3\subset B_1\cap B_2$ a similar argument shows that
 $s_{B_1}|_{B_3}=s_{B_2}|_{B_2}.$
 
 Since $\mathscr{F}$ was a $\mathcal{B}$-sheaf,
-and $S$ was a cover of $U$ our argument above
+and $S$ was a cover of $U$, our argument above
 actually defines a section $s_B\in\mathscr{F}(B)$ for every basic open set
 $B\subseteq U$ (not just those in $S$) and these sections satisfy the condition
 that for any two basic open sets $B_1,B_2\subseteq U$

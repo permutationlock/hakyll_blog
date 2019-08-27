@@ -10,10 +10,17 @@ in Vancouver, supervised by
 [Nils Bruin](http://www.cecm.sfu.ca/~nbruin/index.shtml).
 I am originally from Fairbanks, Alaska.
 
-### Interests
+### Research
 
-In mathematics I am mainly interested in
-[algebraic and arithemetic geometry](http://www.sfu.ca/math/research/algebraic-and-arithmetic-geometry1.html).
+I am part of the
+SFU [algebraic and arithemetic geometry group](http://www.sfu.ca/math/research/algebraic-and-arithmetic-geometry1.html).
+In particular, I am interested in Galois cohomology and rational points on varieties.
+[Here](/pages/ms_research.html) is a brief outline of what I am currently
+working on.
+
+Previously I studied computer science at the University of Alaska. My
+masters work focused on
+[path $3$-coloring algorithms for plane graphs](/posts/path_3_coloring_plane_graphs.html).
 
 ### Articles
 
@@ -21,7 +28,7 @@ In mathematics I am mainly interested in
  - [Amost Turchet intro to rational points](http://sites.math.washington.edu/~aturchet/Index%20Folder/invitation.pdf)
  - [Alex Youcis' intro to ANT](https://ayoucis.wordpress.com/2017/10/02/a-fun-enough-talk/#more-12081)
 
-### Research
+### Seminar
 
  - [SFU NTAG Seminar](http://www.sfu.ca/~nilten/teaching/ntag.html)
 

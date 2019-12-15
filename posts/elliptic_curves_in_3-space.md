@@ -17,7 +17,7 @@ Let us from now on identify $E$ with the isomorphic
 Weierstrass plane curve and let $x=X/Z, y=Y/Z$ be explicit Weierstrass
 coordinates for $E.$
 
-The map $\phi:E\to\mathbb{P}^3$ given by $(1,x,y,x^2)$ clearly maps
+The map $\phi:E\to\mathbb{P}^3$ given by $(1,x,y,x^2)$ maps
 $E$ into the curve given by the intersection of
 $$
     V_1: T_2^2+a_1T_1T_2+a_3T_2T_0=T_1T_3+a_2T_0T_3+a_4T_0T_1+a_6T_0^2
@@ -26,7 +26,7 @@ and
 $$
     V_2: T_0T_3=T_1^2
 $$
-in $\mathbb{P}^3.$ Observe that this map is clearly bijectve on the the
+in $\mathbb{P}^3.$ Observe that this map is bijectve on the
 affine patch $T_0\ne 0$ as we then dehomogenize coordinates
 with $T_0=1$ and find $T_3=T_1^2.$ We also find that there is a
 single point $O'=[0,0,0,1]$ in $V_1\cap V_2$ satisfying $T_0=0.$
@@ -57,7 +57,7 @@ between the elliptic curve $E$ with base point $O$ and the elliptic curve
 $V_1\cap V_2$ with base point $O'.$
 
 Recall from
-[Bezout's Theorem in projective space](/notes/bezout_in_projective_space.html)
+Bezout's theorem in projective space
 that if $F_1,\ldots,F_n\in k[X_1,\ldots,X_{n+1}]_h$ define hypersurfaces
 $Q_1,\ldots,Q_n$ in $\mathbb{P}^n$ in general position, i.e.
 $\text{dim}\left(\bigcap_{i=1}^n Q_i\right)=0,$ then
@@ -89,8 +89,8 @@ $F^h/T_0^{\text{deg}(F^h)}$
 restricts to $f\in\overline{k}(V_1\cap V_2).$
 $$
 \xymatrix{
-    \overline{k}[\mathbb{A}^3] \ar[r] & \overline{k}(\mathbb{P}^3) \ar[d]\\
-    \overline{k}[V_1\cap V_2\cap\mathbb{A}_3] \ar[u] \ar[r]
+    \overline{k}[\mathbb{A}^3] \ar[r]\ar[d] & \overline{k}(\mathbb{P}^3) \ar[d]\\
+    \overline{k}[V_1\cap V_2\cap\mathbb{A}_3] \ar[r]
         & \overline{k}(V_1\cap V_2)
 }
 $$
@@ -103,7 +103,7 @@ Conversely, if $H\subset\mathbb{P}^3$ is a hyperplane defined by a form $F$
 that intersects $V_1\cap
 V_2$ at points $\phi(P),\phi(Q),\phi(R),\phi(S)$, then clearly $f=F/T_0\in
 \overline{k}(V_1\cap V_2)$ such that the divisor of $f$ is
-$(\phi(P))+(\phi(Q))+(\phi(R))+(\phi(S))-(O').$ Thus $P+Q+R+S=O.$
+$(\phi(P))+(\phi(Q))+(\phi(R))+(\phi(S))-4(O').$ Thus $P+Q+R+S=O.$
 
 Thus four
 points add to $O$ on $E$ if and only if there is a hyperplane in $\mathbb{P}^3$

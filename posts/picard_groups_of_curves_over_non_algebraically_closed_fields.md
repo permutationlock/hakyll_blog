@@ -45,7 +45,7 @@ $$
 where $\text{Prin}_k(C)$ is the subset of Galois invariant divisors in
 $\text{Prin}(C)$.
 This is precisely the situation that is studied by
-[Galois cohomology](/notes/galois_cohomology.html).
+Galois cohomology.
 We have $\text{Gal}(\overline{k}/k)$-modules $k^*,k(C)^*,\text{Prin}(C)$,
 and a short exact sequence
 $$
@@ -58,7 +58,7 @@ $$
     0\to k^*\to k(C)^*\to\text{Prin}_k(C)\to H^1(\text{Gal}(\overline{k}/k),k^*).
 $$
 Finally, the cohomological version of
-[Hilbert's Theorem 90](/notes/hilbert_90.html)
+Hilbert's Theorem 90
 tells us that $H^1(\text{Gal}(\overline{k}/k),k^*)=0$.
 
 The inspiration for this problem comes from Silverman (1, Exercise 2.13).

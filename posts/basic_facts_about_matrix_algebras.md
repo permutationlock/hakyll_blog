@@ -9,7 +9,7 @@ header-includes: \usepackage{amsmath,amsthm,amssymb,mathrsfs}
 
 Let $R$ be a ring, and let $m,n$ be positive integers.
 
-**Proposition 1.** Show that the $r$-algebras $M_m(M_n(R))$ and $M_{mn}(R)$ are
+**Proposition 1.** The $R$-algebras $M_m(M_n(R))$ and $M_{mn}(R)$ are
 isomorphic.
 
 <div class="proof">
@@ -18,7 +18,7 @@ $R$-algebra homomorphism by observing that multiplication works as expected in
 each.
 </div>
 
-**Proposition 2.** Show that if $S$ is an $R$-algebra, then there is a natural
+**Proposition 2.** If $S$ is an $R$-algebra, then there is a natural
 isomorphism $M_n(R)\otimes_R S\to M_n(S).$
 
 <div class="proof">
@@ -84,7 +84,8 @@ Thus the map identifies the centre $R$ with the centre of $M_n(R).$
 $k$, then $M_n(A)$ is also a central simple algebra over $k.$
 
 <div class="proof">
-By (iii) we see that $M_n(A)$ is simple iff $A$ is simple. By (iv) we see that
+By proposition 3 we see that $M_n(A)$ is simple iff $A$ is simple. By proposition
+4 we see that
 we may identify $A$ with the subring $A\text{Id}$ of $M_n(A)$ and that $M_n(A)$
 has center equal to the center of $A.$ Thus if $A$ is a CSA over $k$ then so is
 $M_n(A).$

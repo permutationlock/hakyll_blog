@@ -14,13 +14,13 @@ I am originally from Fairbanks, Alaska.
 
 I am part of the
 SFU [algebraic and arithemetic geometry group](http://www.sfu.ca/math/research/algebraic-and-arithmetic-geometry1.html).
-In particular, I am interested in Galois cohomology and rational points on varieties.
-[Here](/pages/ms_research.html) is a brief outline of what I am currently
-working on.
+Right now I am interested in [rational points on surfaces fibered by genus 1
+curves](/pages/msc_summary.html).
 
 Previously I studied computer science at the University of Alaska. My
-masters work focused on
-[path $3$-coloring algorithms for plane graphs](/posts/path_3_coloring_plane_graphs.html).
+masters research with [Glenn Chappell](https://www.cs.uaf.edu/~chappell/)
+studied
+[path coloring algorithms for plane graphs](/posts/path_3_coloring_plane_graphs.html).
 
 ### Articles
 
@@ -32,6 +32,6 @@ masters work focused on
 
  - [SFU NTAG Seminar](http://www.sfu.ca/~nilten/teaching/ntag.html)
 
-This blog was made using [Hakyll](https://jaspervdj.be/hakyll/) with the
+This site was generated using [Hakyll](https://jaspervdj.be/hakyll/) with the
 [latex formulae library](https://github.com/liamoc/latex-formulae). The source
 is [available on github](https://github.com/permutationlock/hakyll_blog).

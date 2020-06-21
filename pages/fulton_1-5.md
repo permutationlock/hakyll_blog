@@ -77,7 +77,8 @@ $$
     &=V(X,Y)\cup V(X-1,Y-1)\cup V(X-1,Y+1).
 \end{aligned}
 $$
-By Lemma \ref{lem:pid_prime_ideals}, these are all irreducible varieties. Thus
+By [lemma 2](/pages/fulton_1-lemmas.html),
+these are each irreducible varieties. Thus
 $$
    V=V(X,Y)\cup V(X-1,Y-1)\cup V(X-1,Y+1)\cup V(Y^2+X).
 $$

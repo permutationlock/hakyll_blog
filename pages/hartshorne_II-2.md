@@ -5,7 +5,26 @@ geometry: margin=1in
 fontsize: 12pt
 published: June 16, 2019
 header-includes: \usepackage{amsmath,amsthm,amssymb,mathrsfs}\usepackage[all]{xy}
-...  
+...
+
+**Note.** The following result is necessary for many of the arguments below
+to work out correctly. The argument is inspired by Vakil's notes.
+
+**Lemma 0.** Let $X$ be a scheme and $U_1,U_2$ two affine open subsechemes,
+$U_1\cong\text{Spec}(A)$ and $U_2\cong\text{Spec}(B)$. Then $U_1\cap U_2$
+is covered by open sets $\{V_i\}$ such that each $V_i$ is a basic open set in
+both $U_1$ and $U_2$.
+
+<div class="proof">
+It suffices to show that each point $x\in U_1\cap U_2$ is contained in such an
+open set. Let $x\in U_1\cap U_2$. Suppose that $\text{Spec}(A_f)$ is a basic
+open set containing $x$. Pick some $\text{Spec}(B_g)$ such that
+$x\in\text{Spec}(B_g)\subset\text{Spec}(A_f)$. Then observe that
+$g\in\mathcal{O}_X(U_2)$ so we may restrict and find
+$g|_{\text{Spec}(A_f)\cap U_2}=g'/f^r\in A_f$ for some $g',f\in A$.
+Thus $\text{Spec}(B_g)=\text{Spec}(A_{fg'})$.
+</div>
+
 **2.1.** Let $\varphi:A\to A_f$ be the natural homomorphism given by $a\mapsto
 a/1.$ Observe that $\varphi$ induces a bijection between the ideals of $A$ not
 containing $f$ and the ideals of $A_f$ via the identification
@@ -100,7 +119,17 @@ $B\in\mathcal{B},$ and therefore define an isomorphism of sheaves
 $\mathscr{P}^{+}\to\mathscr{F}.$
 </div>
 
-**Lemma 3.** Suppose that $g:\mathscr{F}\to\mathscr{G}$ and
+**Lemma 3.** If $\mathscr{P}$ is a presheaf on a topological space $X$ and
+$U\subseteq X$ is open, then $(\mathscr{P}^+)|_{U}$ and
+$(\mathscr{P}|_U)^+$ are equal as sheaves on $U.$
+
+<div class="proof">
+This is immediate from the sheafification construction and the fact that
+the stalks of $\mathscr{P}|_U$ and $\mathscr{P}^+|_U$
+are the same.
+</div>
+
+**Lemma 4.** Suppose that $g:\mathscr{F}\to\mathscr{G}$ and
 $h:\mathscr{F}\to\mathscr{H}$ are morphisms of sheaves such that $h$ is
 surjective and
 $\text{ker}(h)\subseteq\text{ker}(g).$ Then there exists a unique map of
@@ -175,9 +204,10 @@ open cover of $X$ with $U_{\alpha}\cong\text{Spec}(A_\alpha).$ By our work
 above we see that
 $(U_{\alpha})_{\text{red}}\cong\text{Spec}((A_\alpha)_{\text{red}})$ for each
 $\alpha.$ The sheaves $(\mathcal{O}_X|_{U_\alpha})_{\text{red}}$ agree on
-basic affine open sets and thus on intersections. Therefore they glue to a
+affine open sets in their intersections, and thus agree on their
+intersections. Therefore they glue to a
 sheaf $\mathcal{F}$ on $X$. Moreover,
-for each $\alpha$ we see that $\mathcal{F}|_{U_\alpha}$ is clearly equal to
+for each $\alpha$ lemma 3 shows that $\mathcal{F}|_{U_\alpha}$ is equal to
 the sheaf
 $((\mathcal{O}_X)_{\text{red}})|_{U_\alpha}$ given in the problem statement.
 Thus $\mathcal{F}\cong(\mathcal{O}_X)_{\text{red}}.$ The maps of affine
@@ -203,41 +233,56 @@ $$
 }
 $$
 To simplify notation let us identify the topological
-spaces $|Y|$ and $|Y_{\text{red}}|$ so the morphism $h:Y\to Y_{\text{red}}$
-gives a map
-$h^{\#}:\mathcal{O}_{Y}\to(\mathscr{O}_Y)_{\text{red}}.$
+spaces $|Y|$ and $|Y_{\text{red}}|$ so the map $h:Y\to Y_{\text{red}}$
+is the identity as a map of topological spaces and the corresponding sheaf map
+$h^{\#}:\mathcal{O}_{Y}\to(\mathscr{O}_Y)_{\text{red}}$ is the natural map from
+part b.
 We also have the map $f^{\#}:\mathcal{O}_Y\to f_*(\mathcal{O}_X)$ given by the
 morphism $f.$
-Thus to complete our construction of a morphism $g$ with the desired properties
+
+To complete our construction of a morphism $g$ with the desired properties
 it suffices to show that there exists
 a pullback map $g^{\#}:\mathscr{O}_{Y_{\text{red}}}\to g^*\mathscr{O}_X$ such
 that $f^{\#}=g^{\#}\circ h^{\#}.$
-
-Observe that for $U\subseteq X$ open we have pullback morphism
-$f^{\#}(U):\mathscr{O}_Y(U)\to f_*\mathscr{O}_X(U)=\mathscr{O}_X(f^{-1}(U))$.
+Observe that we have the following pullback morphisms.
 $$
 \xymatrix{
-    \mathscr{O}_{Y}(U) \ar[d]_{h^{\#}(U)}\ar[dr]^{f^{\#}(U)}
+    \mathscr{O}_{Y} \ar[d]_{h^{\#}}\ar[dr]^{f^{\#}}
         & \\
-    (\mathscr{O}_{Y})_{\text{red}}(U) \ar[r]_{g^{\#}(U)}
-        & f_*\mathscr{O}_X(U).
+    (\mathscr{O}_{Y})_{\text{red}} \ar[r]_{g^{\#}}
+        & f_*\mathscr{O}_X.
 }
 $$
-Moreover, since $\mathscr{O}_X$ is reduced, $\mathscr{O}_X(f^{-1}(U))$ is
-reduced. So the kernel of $f^{\#}(U)$ must contain the nilradical of
-$\mathscr{O}_Y(U)$. Thus it contains the kernel of $h^{\#}(U):
-\mathscr{O}_Y(U)\to\mathscr{O}_{Y_{\text{red}}}(U)$. So there exists a
-unique homomorphism $g^{\#}(U):\mathscr{O}_{Y_{\text{red}}}(U)\to
-f_*\mathscr{O}_X$ such that $f^{\#}(U)=g^{\#}(U)\circ h^{\#}(U).$
-The diagram also commutes with restriction $U\to V$ for $V\subseteq U$ and therefore
-defines a morphism $g^{\#}:\mathscr{O}_Y\to f_*\mathscr{O}_X$ such
-that $f^{\#}=g^{\#}\circ h^{\#}.$
-With our identification of $|Y|$ and $|Y_{\text{red}}|$ we have
-that $f_*\mathscr{O}_X=g_*\mathscr{O}_X.$
-Thus our construction above defines a morphism
-$g^{\#}:(\mathscr{O}_{Y})_{\text{red}}\to
-g_*\mathscr{O}_X$ that gives a local homomorphism of local rings and thus
-$(g,g^{\#})$ define a morphism of schemes.
+Moreover, since $\mathscr{O}_X$ is reduced, $f_*\mathscr{O}_X$ is
+reduced. So the kernel of $f^{\#}$ must contain the kernel of $h^{\#}.$
+Thus by lemma 4 above there exists a morphism
+$g^{\#}:(\mathscr{O}_{Y})_{\text{red}}\to f_*\mathscr{O}_X$ such that $f^{\#}=
+g^{\#}\circ h^{\#}.$
+
+It remains to observe that $g^{\#}$ is a morphism of
+locally ringed spaces. Observe that for each $P\in Y_{\text{red}}$ we have
+that the map
+$h^{\#}_h(P):\mathscr{O}_{Y,h(P)}\to((\mathscr{O}_{Y})_{\text{red}})_P$ is
+surjective.
+Moreover, $(h^{\#})^{-1}_{h(P)}(\mathfrak{m}_{P})=\mathfrak{m}_{h(P)}.$
+Now let $P\in X.$ Since $f^{\#}$ is a map of locally ringed spaces we have
+$(f^{\#}_{f(P)})^{-1}(\mathfrak{m}_{P})=\mathfrak{m}_{h(P)}.$ Note that by our
+identifiaction $|Y|=|Y_{\text{red}}|$, i.e., the fact that $h$ is the identity
+and $h(g(P))=f(P),$
+we have that
+$f^{\#}_{f(P)}=h^{\#}_{f(P)}\circ g^{\#}_{g(P)}.$ Since $h^{\#}_{f(P)}$ is
+surjective we have $h^{\#}_{f(P)}((h^{\#}_{f(P)})^{-1}(S))=S$ for any set
+$S.$ Therefore
+$$
+    \begin{aligned}[t]
+    \mathfrak{m}_{g(P)} &=
+    h^{\#}_{f(P)}((h^{\#}_{f(P)})^{-1}(\mathfrak{m}_{g(P)}))\\
+    &= h^{\#}_{f(P)}(\mathfrak{m}_{f(P)})\\
+    &=
+    h^{\#}_{f(P)}((h^{\#}_{f(P)})^{-1}((g^{\#}_{g(P)})^{-1}(\mathfrak{m}_P)))\\
+        &= (g^{\#}_{g(P)})^{-1}(\mathfrak{m}_P).
+    \end{aligned}
+$$
 
 **2.4.** Let us first show the result for affine schemes (this is actually
 already done in Hartshorne in proposition 2.3c).
@@ -330,6 +375,309 @@ f^{\#}(\text{Spec}(A)).$ Thus there is a bijection
 $$
     \text{Hom}(X,\text{Spec}(A))\cong\text{Hom}(A,\Gamma(X,\mathcal{O}_X)).
 $$
+
+**2.5.** We see that $\text{Spec}(\mathbb{Z})=\{(0)\}\cup\{(p) \, : \, p
+\text{ prime}\}.$ Note that each point is closed since $\mathbb{Z}$ is a P.I.D
+and prime ideals are maximal. We also find that
+$(0)$ has residue field $\mathbb{Q}$, and for each prime $p$ the point
+$(p)$ has residue field $\mathbb{F}_p.$
+
+Observe that for every scheme $X$ there is a unique map from
+$\mathbb{Z}\to\Gamma(X,\mathscr{O}_X).$ Therefore by exercise 2.4 there exists
+a unique map $X\to\text{Spec}(\mathbb{Z}).$ So $\text{Spec}(\mathbb{Z})$ is the
+final object in the category of schemes.
+
+**2.6.** Observe that $\text{Spec}(0)=\emptyset$ as there are no proper ideals.
+Thus there is a unique map of topological spaces $f:\text{Spec}(0)\to X$ for
+every scheme $X$: the empty map. We see that we may naturally define
+$f^{\#}(U):\mathscr{O}_X(U)\to
+f_*\mathscr{O}_{\text{Spec}(0)}(U)=0$ as the zero map. Thus $(f,f^{\#})$ is a
+map of schemes.
+
+Now if $f:X\to\text{Spec}(0)$ is a map of schemes then we must have
+$|X|=\emptyset.$ Therefore there is only one open set and as $X$ is a scheme
+it must be affine, i.e., $X=\text{Spec}(R)$ with $R$ a commutative ring with no
+prime ideals. A nonzero commutative ring with 1 always has a prime ideal, thus
+$R=0$ and $X=\text{Spec}(0).$
+
+**2.7.** Observe that $\text{Spec}(K)=\{(0)\}.$
+
+Suppose that $f:\text{Spec}(K)\to X$ is a map of schemes with
+$f((0))=x.$ Then $f_x^{\#}:\mathscr{O}_{X,p}\to K$ satisfies
+$(f_x^{\#})^{-1}((0))=\mathfrak{m}_x.$ So $f_x^{\#}$ descends to an injective
+map of fields
+$k(x)\hookrightarrow K.$ Observe that $f^{-1}(U)=\emptyset$ if $x\not\in U$ and
+$f^{-1}(U)=\text{Spec}(K)$ otherwise. Therefore the image of a section $s$
+under the map
+$f^{\#}(U):\mathscr{O}_X(U)\to f_*\mathscr{O}_{\text{Spec}(k)}(U)$ is
+determined by the stalk $s_x.$ So the map $f_x^{\#}$ determines the entire map
+of sheaves and, together with the choice of point $x$, the map of schemes.
+
+Our observations above in fact tell us exactly how to determine a map of
+schemes $f:\text{Spec}(K)\to X$ given any point $x\in X$ and any inclusion
+$k(x)\hookrightarrow K.$
+
+**2.8.** Observe that $\text{Spec}(k[\varepsilon]/\epsilon^2)=\{(\varepsilon)\}.$
+
+Suppose that $f:\text{Spec}(k[\varepsilon]/\varepsilon^2)\to X$ is a
+map of $k$-schemes. Let $x=f((\varepsilon)).$ Observe that
+$(k[\varepsilon]/\varepsilon^2)_(\varepsilon)=k[\varepsilon]/\varepsilon^2$
+since every element not in $(\varepsilon)$ is already invertible. Therefore
+$f^{\#}_x:\mathscr{O}_{X,x}\to k[\varepsilon]/\varepsilon^2$ descends to an inclusion
+$k(x)\hookrightarrow k$ that is a $k$-algebra homomorphism. So the map
+$k(x)\hookrightarrow k$ is the identity and $k(x)=k.$ By the
+requirement that $(f_x^{\#})^{-1}((\varepsilon))=\mathfrak{m}_x$ we see that
+$f^{\#}_x(\mathfrak{m}_x^2)\subseteq(\varepsilon^2)=(0).$ So the map $f_x^{\#}$
+is determined by a map $\mathfrak{m}_x/\mathfrak{m}_x^2\to (\varepsilon).$
+As every element of $(\varepsilon)$ is of the form $c\varepsilon$ for $c\in k,$
+this map is in fact determined by a $k$-vector space map
+$\mathfrak{m}_x/\mathfrak{m}_x^2\to k.$ Observing that
+$f_*\mathscr{O}_{\text{Spec}(k[\varepsilon]/\varepsilon^2)}(U)=0$ if
+$x\not\in U,$ and $k[\varepsilon]/\varepsilon^2$ otherwise, we see that
+$f^{\#}(U)$ is determined by the map of stalks $f_x^{\#}$ just as in exercise
+2.7 above.
+
+Conversely, given a point $x$ with $k(x)=k$ and a $k$-vector space
+map $\varphi:\mathfrak{m}_x/\mathfrak{m}_x^2\to k$ we may define a map
+$f^{\#}_x:\mathscr{O}_X\to k[\varepsilon]/\varepsilon^2$ as follows. For each
+$a\in\mathscr{O}_X$ we define $a_0\in k$ to be the image of $a$ under the
+residue map
+$\mathscr{O}_X\to k(x)$ and $a_1\in k$ to be the image of
+the class $\overline{a-a_0}\in\mathfrak{m}_x/\mathfrak{m}_x^2$ under the
+map $\varphi.$ We define $f^{\#}_x(a)=a_0+a_1.$
+Observe that $a-a_1-a_0\in\mathfrak{m}_x^2$ and thus maps to $0$
+under this map. Moreover, if $a,b\in\mathscr{O}_x$ then since the maps
+$a\mapsto a_0$ and $a\mapsto a_1$ are $k$-vector space homomorphisms we find
+that $f_x^{\#}$ is a well defined $k$-algebra homomorphism,
+i.e., $(ab)_i=a_ib_i,$ $(a+b)_i=a_i+b_i.$ Therefore we get a well defined map
+of schemes.
+
+**Lemma 5.** If $\mathfrak{a}$ is an ideal in a ring $A$, then
+$\sqrt{\mathfrak{a}}$ is the intersection of all prime ideals containing
+$\mathfrak{a}.$
+
+<div class="proof">
+Observe that $\sqrt{\mathfrak{a}}$ is the preimage of the nilradical of
+$A/\mathfrak{a}$ under the natural map $A\to A/\mathfrak{a}.$ Moreover,
+there is a bijection between the prime ideals of $A$ containing $\mathfrak{a}$
+and the ideals of $A/\mathfrak{a}.$ Thus the result follows from the fact that
+the nilradical of $A/\mathfrak{a}$ is the intersection of all prime ideals.
+</div>
+
+**Lemma 6.** For $f\in A$ and $\mathfrak{a}\subseteq A$ an ideal,
+$V(\mathfrak{a})\cap D(f)=\emptyset$ if and only if $f\in\sqrt{\mathfrak{a}}.$
+
+<div class="proof">
+Suppose that $D(f)\cap V(\mathfrak{a})=\emptyset.$ Then every prime ideal
+containing $\mathfrak{a}$ contains $f.$ Hence by lemma 5 above we have
+$f\in\sqrt{\mathfrak{a}}.$
+
+Conversely, suppose that $f\in\sqrt{\mathfrak{a}}.$ Then $f^n\in\mathfrak{a}$
+and hence $f^n\in\mathfrak{p}$ for every prime ideal
+$\mathfrak{p}\supseteq\mathfrak{a}.$ Thus $D(f)\cap V(\mathfrak{a})=\emptyset.$
+</div>
+
+**Lemma 7.** A nonempty closed subset $V(\mathfrak{a})\subseteq\text{Spec}(A)$
+is irreducible if and only if $\sqrt{\mathfrak{a}}$ is prime.
+
+<div class="proof">
+Recall that a topological space is irreducible if and only if the intersection
+of every pair of nonempty basic open sets is nonempty. By lemma 6 above
+$D(f)\cap V(\mathfrak{a})=\emptyset$ if and only if $f\in\sqrt{\mathfrak{a}}.$
+Let $f,g\not\in\sqrt{\mathfrak{a}}.$ Then $fg\in\sqrt{\mathfrak{a}}$ if and
+only if $D(fg)\cap V(\mathfrak{a})=\emptyset.$ Hence there exists a pair of
+nonempty basic open subsets whose intersection is empty if and only if there
+exists a pair $f,g\not\in\sqrt{\mathfrak{a}}$ such that
+$fg\in\sqrt{\mathfrak{a}}.$ So $V(\mathfrak{a})$ is irreducible if and only if
+$\sqrt{\mathfrak{a}}$ is prime.
+</div>
+
+**Lemma 8.** An (non-empty) affine scheme $\text{Spec}(A)$ is irreducible if
+and only if
+the nilradical of $A$ is prime.
+
+<div class="proof">
+Recall that a topological space is irreducible if and only if the
+intersection of any two nonempty basic open subsets is
+nonempty. Suppose that $D(f),D(g)$
+are nonempty basic open subsets of $\text{Spec}(A).$ Then $f,g$ are not
+nilpotent. Their intersection $D(fg)=\emptyset$ if and only if $fg$ is
+nilpotent. Therefore $\text{Spec}(A)$ is irreducible if and only if the
+nilradical of $A$ is prime.
+</div>
+
+**2.9.**
+Let $\{U_\alpha\}$ be an affine open cover of $X,$ i.e.,
+$U_\alpha\cong\text{Spec}(A_\alpha).$ Observe that $Z\cap
+U_\alpha$ is an irreducible closed subset of $U_\alpha.$ Therefore by lemma 7
+above $Z\cap
+U_\alpha= V(\mathfrak{p}_\alpha)\subseteq\text{Spec}(A_\alpha)$ for a unique prime ideal
+$\mathfrak{p}_\alpha\subseteq A_\alpha$ as long as $U_\alpha\cap Z\ne\emptyset.$
+So $\mathfrak{p}_\alpha$ is a unique
+generic point for $Z\cap U_{\alpha}$ in $\text{Spec}(A_\alpha).$
+For each $\alpha$ such that $U_\alpha\cap Z\ne\emptyset$ let
+$\eta_\alpha$ be the point in $X$
+corresponding to $\mathfrak{p}_\alpha.$ By construction the closure
+$\overline{\{\eta_\alpha\}}$ in $X$ is some closed subset containing
+$U_\alpha\cap Z$ and contained in $Z.$ If $\overline{\{\eta_\alpha\}}\ne Z$
+we have $Z=\overline{\{\eta_\alpha\}}\cup (Z\setminus U_\alpha),$ a
+contradiction to the assumption that $Z$ was irreducible. Moreover, this
+implies that
+$\eta_\alpha\in \bigcap_{\beta} (Z\cap U_\beta)$ where the union is taken over all
+$\beta$ such that $U_\beta\cap Z\ne\emptyset.$ This follows from the observation that
+if $\eta_\alpha\not\in U_\beta$
+then $Z=\overline{\{\eta_\alpha\}}\subseteq X\setminus U_\beta,$ so 
+$U_\beta\cap Z=\emptyset.$
+So for each $\alpha,\beta$ we see
+that $\eta_\alpha,\eta_\beta$ are each generic points for $Z\cap U_\alpha.$
+Thus $\eta_\alpha=\eta_\beta$ by the uniqueness of the generic point
+$\eta_\alpha$ of $Z\cap
+U_\alpha$ in $U_\alpha=\text{Spec}(A_\alpha).$
+
+**2.10.** The set $\text{Spec}(\mathbb{R}[x])$ consists of all closed points, one
+point for $(x-r)$ for each $r\in\mathbb{R}$ and one point for each $(x^2+r)$ for
+each positive $r\in\mathbb{R}.$ The residue fields for the "linear points" are
+$\mathbb{R},$ while the residue field of a "quadratic point" $(x^2+r)$ is
+$\mathbb{R}[\sqrt{-r}]=\mathbb{C}.$ Topologically one might think of
+$\text{Spec}(\mathbb{R})$ as the upper half plane in $\mathbb{C}$ with the
+co-finite topology.
+
+The inclusion $\mathbb{R}[x]\hookrightarrow\mathbb{C}[x]$
+gives a map $\text{Spec}(\mathbb{C}[x])\to\text{Spec}(\mathbb{R}[x])$ where the
+fibers over the points of type $(x^2+r)$ consist of two points given by the
+factorization of $x^2+r$ over $\mathbb{C}.$ The set $\text{Spec}(\mathbb{C})$
+looks like $\mathbb{C}$ with the co-finite topology since the prime ideals of
+$\mathbb{C}[x]$ are precisely the ideals $(x-a)$ for $a\in\mathbb{C}.$
+
+**2.11.** The set $\text{Spec}(\mathbb{F}_p[x])$ consists of all closed points,
+one for each irreducible polynomial.
+
+**2.12.**
+
+
+**2.2.13.a.**
+Suppose that $X$ is noetherian. Then $X$ satisfies the descending chain
+condition on closed subsets, or equivalently the ascending chain condition
+on open subsets. Suppose that $\{U_i\}_{i\in I}$ is an open cover of $X$.
+Then subset inclusion gives a partial order on
+$A=\{S\subset I \text{ is finite}\}$.
+Moreover, for every finite $S\subset I$ we have an open set
+$U_S=\bigcup_{i\in S}U_i$ and the a corresponding poset
+$Y=\{(U_S, S) : S\in A\}$ with the partial order given by the order on $A$.
+The ascending chain condition gives us that
+every chain in $Y$ has an upper bound. Thus Zorn's lemma gives us that
+there exists a maximal element of $Y$. If this maximal element
+$(U_S,S)$ is not such that $U_S=X$ then this is a contradiction to
+$(U_S,S)$ being maximal sinc $\{U_i\}_{i\in I}$ covered all of $X$.
+Thus $\{U_i\}_{i\in S}$ is a finite subcover.
+
+Suppose conversely that $X$ is quasi-compact. Then given any descending
+chian of closed sets 
+
+**2.2.13.b.**
+Suppose that $\{U_\alpha=X\setminus V(I_\alpha)\}_{\alpha\in J}$ is an
+open cover of $X=\text{Spec}(A)$. Then $\sum_{\alpha\in J}I_\alpha=A$. So
+in particular, there exist $a_\alpha$ for each $\alpha\in J'$ for some
+subset $J'\subseteq J$ such that $\sum_{\alpha\in J'}a_\alpha=1$. Thus
+$\sum_{\alpha\in J'}I_\alpha=1$ and hence $\bigcap_{\alpha\in J'}
+V(I_{\alpha})=\emptyset$. So $\{U_{\alpha}\}_{\alpha\in J'}$ is a finite
+subcover of our original cover.
+
+To see $\text{Spec}(A)$ is not necessarily noetherian,
+pick $A=\mathbb{C}[x_1,x_2,\ldots]$. Then there exists the infinite ascending chain of
+prime ideals
+$$
+    (x_1)\subsetneq (x_1,x_2)\subsetneq (x_1,x_2,x_3)\ldots\subsetneq\ldots.
+$$
+This gives a
+corresponding descending chain of closed subsets
+$$
+    V((x_1))\supsetneq
+V((x_1,x_2))\supsetneq V((x_1,x_2,x_3))\supsetneq\ldots.
+$$
+Thus $\text{Spec}(A)$ is not
+noetherian.
+
+**2.2.13.c.**
+Suppose that $A$ is noetherian. Let $V(I_1)\supset
+V(I_2)\supset\ldots$ be a descending chain of closed sets. Then $I_1\subset
+I_2\subset I_2$ is an ascending chain of ideals. Thus $I_i=I_j$ for all
+$i,j\ge N$ for some $N$.
+
+**2.2.13.d.**
+Observe that if we have an infinite ascending chain of prime ideals in a
+ring $A$, but the ideals are generated by nilpotent elements, then each
+ideal in this chain will map to the $(0)$ ideal in $A_{\text{red}}$.
+Moreover, we showed in Exercise 2.2.3b that $\text{sp}(\text{Spec}(A))$ is
+homeomorphic to
+$\text{sp}(\text{Spec}(A_{\text{red}}))=\text{sp}((\text{Spec}(A))_{\text{red}})$.
+Thus $\text{sp}(\text{Spec}(A))$ is noetherian if and only if
+$\text{sp}(\text{Spec}(A_\text{red}))$ is noetherian.
+
+For an explicit example we can take
+$A=\mathbb{C}[x_1,x_2,\ldots]/(x_1^2,x_2^2,\ldots)$. Observe that
+$(x_1)\subsetneq (x_1,x_2)\subsetneq\ldots$ but $x_1,x_2,\ldots$ are all
+nilpotent in $A$. Thus $A_{\text{red}}=\mathbb{C}$ which is clearly
+noetherian, and hence $\text{sp}(\text{Spec}(A))$ is noetherian.
+
+**Lemma 9.** Let $S=\oplus S_n$ be a graded ring. Then the following
+statements hold.
+
+ (1) An ideal $I$ of $S$ is generated by its homogeneous elements if and only
+    if for every $n\in\mathbb{Z}$ and every $f\in I$ the degree $n$ part of $f$
+    is contained in $I$ as well. We say that $I$ is a homogeneous ideal.
+ (2) If $I,J\subseteq S$ are homogeneous ideals, then so are $I+J,$ $IJ,$ and
+    $I\cap J.$
+ (3) A homogeneous ideal $I\subseteq S$ is prime if and only if for every
+    homogeneous $a,b\in S,$ the product $ab$ is in $I$ if and only if $a$
+    or $b$ is in $I.$
+
+**Lemma 10.** Let $S$ be a graded ring. If $f\in S_+$ is a homogeneous element
+then there is a one-to-one correspondence between the prime ideals of
+$S_{(f)}$ and the homogeneous prime ideals of $S_f.$
+
+<div class="proof">
+
+</div>
+
+**Lemma 11.** If $S$ is a graded ring and $f,g\in S_+$ are homogeneous, then
+$D_+(fg)$ is isomorphic to the affine subset
+$D(g^{\text{deg}(f)}f^{-\text{deg}(g)})$ in $D_+(f)=\text{Spec}(S_(f)).$
+Therefore $D_+(f)\cap D_+(g)=D_+(fg)$ is a basic affine open subset of both
+$D_+(f)$ and $D_+(g).$
+
+**2.14.a.** Suppose that $x\in S^{+}.$ If $x$ is not nilpotent, then there
+exists a prime ideal $\mathfrak{p}\subseteq S$ not containing $x$ (since the
+nilradical is the intersection of all prime ideals). The homogenization
+$\mathfrak{p}^h,$ defined to be the ideal generated by homogeneous elements of
+$\mathfrak{p},$ is prime as well (see for example Cox-Little-O'Shea's
+undergraduate book). Therefore $\mathfrak{p}^h$ is a prime ideal not containing
+$x$ thus $\mathfrak{p}^h\in\text{Proj}(S).$
+
+Conversely, if every element of $S^{+}$ is nilpotent then
+$S^{+}$ is contained in every prime ideal of $S.$ Therefore every homogeneous
+prime ideal contains the trivial ideal and $\text{Proj}(S)=\emptyset.$
+
+**2.14.b.** Let $(S_+)_h$ be the set of homogeneous elements of $S_+.$
+Observe that if $\mathfrak{p}\subseteq T$ is a homogeneous ideal such that
+$\mathfrak{p}\not\supseteq\varphi(S_+)$ then there must exist an element
+$\varphi(g)\in\mathfrak{p}$ for some $g\in\varphi(S_+).$ Therefore one of the
+homogeneous elements of $\varphi(g)$ must not be contained in $\mathfrak{p}.$
+So for every ideal $\mathfrak{p}\in U$ there exists a homogeneous element
+$g\in (S_+)_h$ such that $\varphi(g)\not\in\mathfrak{p}.$ Therefore
+$U=\bigcup_{s\in (S_+)_h}D_+(\varphi(s))$ and $U$ is open.
+
+Now let $g\in(S_+)_h.$ Observe that $\varphi:S\to T$ localizes to a map
+$\varphi_g:S_{(g)}\to T_{(\varphi(g))}$ as it preserves degrees. By exercise
+$2.4$ these maps define a
+collection of morphisms of affine schemes
+$$f_g:D_+(\varphi(g))=\text{Spec}(T_{(\varphi(g))})
+    \to\text{Spec}(S_{(g)})=D_+(g).
+$$
+Moreover,
+for any $g_1,g_2\in (S_+)_h$ we have
+$f_{g_1}|_{D_+(\varphi(g_1g_2))}=f_{g_1g_2}.$ Thus they glue to a morphism of
+schemes $f:U\to\text{Proj}(S).$
 
 **2.18.a.** Recall that the nilradical of $A$ is the intersection of all prime
 ideals in $A.$ Therefore $f$ is nilpotent if and only if $f$ is contained in

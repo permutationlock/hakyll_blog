@@ -7,7 +7,6 @@
         <title>$title$</title>
 
         <link rel="stylesheet" href="/css/default.css">
-        <link rel="stylesheet" href="/fonts/cm_sans/cmun-sans.css">
 
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-131210183-1"></script>
         <script>
@@ -19,13 +18,10 @@
     </head>
     <body>
         <header class="header">
-            <h2>Aven Bross</h2>
+            <h2>Permutationlock</h2>
             <nav>
-                <a href="/" $if(page-about)$class="active"$endif$>Home</a>
-                <a href="/cv.html"$if(page-cv)$class="active"$endif$>CV</a>
-                <a href="/posts.html"$if(page-posts)$class="active"$endif$>Blog</a>
-                <a href="/notes.html"$if(page-notes)$class="active"$endif$>Notes</a>
-                <a href="https://github.com/permutationlock">Git</a>
+                <a href="/"$if(page-posts)$class="active"$endif$>Blog</a>
+                <a href="/about.html" $if(page-about)$class="active"$endif$>About</a>
             </nav>
         </header>
 
@@ -38,7 +34,8 @@
         </main>
 
         <footer class="footer">
-            Aven Bross --- <a href="http://www.sfu.ca/math.html">SFU</a>, Vancouver, BC
+            <i>Clearly, Mr. Dirkh has had a long career of being the weirdest
+                person in any given room, but he's about to go down in flames.</i>
         </footer>
     </body>
 </html>

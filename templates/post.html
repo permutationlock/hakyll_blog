@@ -11,4 +11,9 @@
     <section>
         $body$
     </section>
+    $if(tags)$
+    <section>
+        <b>Tags: </b>$for(tagsList)$<a href="/tags/$tag$.html">$tag$</a>&nbsp;$endfor$
+    </section>
+    $endif$
 </article>

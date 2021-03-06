@@ -1,6 +1,6 @@
 @charset "UTF-8";
 body {
-    font-family: "Computer Modern Sans", sans-serif;
+    font-family: "Courier New", sans-serif;
 }
 body a {
     text-decoration: none;
@@ -35,7 +35,7 @@ body a:hover {
 
 .section {
     width: device-width;
-    max-width: 600px;
+    max-width: 700px;
     float: center;
     padding-left: 10px;
     padding-right: 10px;
@@ -49,22 +49,19 @@ table {
     border-spacing: 8px 0px;
 }
 
-.display-math {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    padding-top: 7px;
-    padding-bottom: 7px;
+ul {
+    list-style-type: lower-greek;
+    padding-left: 20px;
 }
 
-.inline-math {
-    display: inline;
-    margin: 0;
+ul li {
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .footer {
     width: device-width;
-    max-width: 500px;
+    max-width: 600px;
     float: center;
     padding-left: 10px;
     padding-right: 10px;
@@ -72,19 +69,4 @@ table {
     background-color: white;
     color: black;
     text-align: center;
-}
-
-.proof {
-    padding-bottom: 1px;
-}
-.proof p:first-of-type::before {
-    content: "Proof. ";
-    font-style: italic;
-}
-.proof p:last-of-type::after {
-    white-space: pre;
-    text-align: right;
-    float: right;
-    font-size: large;
-    content: "□";
 }

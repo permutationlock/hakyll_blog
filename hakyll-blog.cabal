@@ -6,10 +6,7 @@ cabal-version:      >= 1.10
 executable site
   main-is:          site.hs
   build-depends:    base == 4.*
-                  , hakyll == 4.12.*
-                  , latex-formulae-image == 0.1.*
-                  , latex-formulae-pandoc == 0.*
-                  , latex-formulae-hakyll == 0.2.*
+                  , hakyll == 4.*
                   , pandoc-types == 1.*
   ghc-options:      -threaded -dynamic
   default-language: Haskell2010

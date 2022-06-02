@@ -65,9 +65,9 @@ main = do
                 let ids = map itemIdentifier posts
                 tagsList <- nub . concat <$> traverse getTags ids
                 let blogCtx =
+                        constField "title" "Posts" `mappend`
                         listField "posts" postCtx (return posts) `mappend`
                         postCtxWithTagList tagsList `mappend`
-                        constField "title" "Posts"            `mappend`
                         constField "page-posts" "" `mappend`
                         constField "untagged" "" `mappend`
                         defaultContext

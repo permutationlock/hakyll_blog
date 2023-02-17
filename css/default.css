@@ -1,72 +1,89 @@
 @charset "UTF-8";
 body {
-    font-family: "Courier New", sans-serif;
+    font-family: "Courier New", monospace;
+    background-color: #31363b;
+    color: #eff0f1;
+    font-size: 1em;
 }
 body a {
     text-decoration: none;
 }
-body a:visited, body a:active, body a:link {
-    color: #157640;
+.section a:visited {
+    color: #7f8c8d;
 }
-body a:hover {
-    color: #3cb371;
+.section a:link {
+    color: #2980b9;
 }
+.section a:hover {
+    color: #3daee9;
+}
+.section a:active {
+    color: #2980b9;
+}
+
+.section h1 { font-size: 1.4em; }
+.section h2 { font-size: 1.3em; }
+.section h3 { font-size: 1.2em; }
 
 .active {
     font-weight: bold;
 }
 
 .header {
-    background-color: white;
-    color: black;
     text-align: center;
 }
-.header a {
-    margin-left: 10px;
-    margin-right: 10px;
-    font-size: large;
+
+.header h1 {
+    font-size: 2em;
 }
-.header a:visited, .header a:link {
-    color: black;
+
+.header a {
+    margin-left: 1ch;
+    margin-right: 1ch;
+    font-size: 1.4em;
+}
+.header a:link, a:visited {
+    color: #eff0f1;
 }
 .header a:hover {
-    color: #3cb371;
+    color: #3daee9;
 }
+.header a:active {
+    color: #2980b9;
+}
+
+.postHeader {
+    text-align: center;
+}
+.postHeader h1 { font-size: 1.5em; }
 
 .section {
     width: device-width;
-    max-width: 700px;
+    max-width: 70ch;
     float: center;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 5px;
+    padding-left: 1ch;
+    padding-right: 1ch;
+    padding-top: 0.5ch;
     text-align: justify;
     text-justify: inter-word;
     margin: auto;
 }
 
-table {
-    border-spacing: 8px 0px;
-}
-
 ul {
     list-style-type: lower-greek;
-    padding-left: 20px;
 }
 
 ul li {
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 0.5ch;
+    margin-bottom: 0.5ch;
 }
 
 .footer {
     width: device-width;
-    max-width: 600px;
+    max-width: 60ch;
     float: center;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 1ch;
+    padding-right: 1ch;
     margin: auto;
-    background-color: white;
-    color: black;
     text-align: center;
 }

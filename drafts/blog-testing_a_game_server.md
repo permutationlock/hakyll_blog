@@ -7,7 +7,7 @@ tags: blog, software
 
 As alluded to in a few of my previous posts, I have been writing a C++ game
 server library, which is
-[available on GitHub](https://github.com/permutationlock/jwt_game_server).
+[available on GitHub](https://github.com/permutationlock/simple_game_server).
 The goal of this library is to provide a framework to easily develop
 [JWT](https://jwt.io/) authenticated WebSocket backends for JavaScript games.
 
@@ -45,8 +45,12 @@ as a logging sync.
 
 ```C++
 std::ostringstream oss;
-auto ostream_sink = std::make_shared<spdlog::sinks::ostream_sink_mt> (oss);
-auto logger = std::make_shared<spdlog::logger>("my_logger", ostream_sink);
+auto ostream_sink = std::make_shared<
+        spdlog::sinks::ostream_sink_mt
+    > (oss);
+auto logger = std::make_shared<spdlog::logger>(
+        "my_logger", ostream_sink
+    );
 spdlog::set_default_logger(logger);
 spdlog::set_level(spdlog::level::err);
 ```
@@ -63,7 +67,6 @@ infrequent occurrence and not a main focus of testing; we really want to test
 that the server behaves correctly.
 
 In order to do this I wrote a simple client class
-[**jwt_game_server::base_client**](https://github.com/permutationlock/jwt_game_server/blob/main/include/jwt_game_server/base_client.hpp)
 which I could use to spin up fake clients. In order to allow several servers to
 be served on the same ports in quick succession I utilized the SO_REUSEADDR
 flag, accessed via the websocketpp library's

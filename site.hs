@@ -4,11 +4,12 @@ import Data.Monoid (mappend)
 import Data.Maybe
 import Data.List
 import Text.Pandoc.Definition
+import Text.Pandoc.Highlighting (Style, breezeDark, styleToCss)
+import Text.Pandoc.Options (ReaderOptions (..), WriterOptions (..))
 import Hakyll
 import Hakyll.Web.Pandoc
     ( defaultHakyllReaderOptions
     , defaultHakyllWriterOptions
-    , pandocCompilerWithTransformM
     )
 
 --------------------------------------------------------------------------------
@@ -27,7 +28,7 @@ main = do
             compile $ do
                 tagsList <- (getUnderlying >>= getTags)
                 let ctx = (postCtxWithTagList tagsList)
-                pandocCompiler
+                pandocCompiler'
                     >>= loadAndApplyTemplate "templates/post.html" ctx
                     >>= loadAndApplyTemplate "templates/default.html" ctx
                     >>= relativizeUrls
@@ -53,7 +54,7 @@ main = do
         match "pages/*.md" $ do
             route $ setExtension "html"
             compile $ do
-                pandocCompiler
+                pandocCompiler'
                     >>= loadAndApplyTemplate "templates/post.html" postCtx
                     >>= loadAndApplyTemplate "templates/default.html" postCtx
                     >>= relativizeUrls
@@ -77,13 +78,18 @@ main = do
                     >>= loadAndApplyTemplate "templates/default.html" blogCtx
                     >>= relativizeUrls
 
+        --create ["css/syntax.css"] $ do
+        --    route idRoute
+        --    compile $ do
+        --        makeItem $ styleToCss pandocCodeStyle
+
         match "quotes.md" $ do
             route $ setExtension "html"
             compile $ do 
                 let cvCtx =
                         constField "page-quotes" "" `mappend`
                         defaultContext
-                pandocCompiler
+                pandocCompiler'
                     >>= loadAndApplyTemplate "templates/default.html" cvCtx
                     >>= relativizeUrls
 
@@ -93,7 +99,7 @@ main = do
                 let aboutCtx =
                         constField "page-about" "" `mappend`
                         defaultContext
-                pandocCompiler
+                pandocCompiler'
                     >>= loadAndApplyTemplate "templates/default.html" aboutCtx
                     >>= relativizeUrls
 
@@ -101,6 +107,17 @@ main = do
 
 
 --------------------------------------------------------------------------------
+pandocCodeStyle :: Style
+pandocCodeStyle = breezeDark
+
+pandocCompiler' :: Compiler (Item String)
+pandocCompiler' =
+  pandocCompilerWith
+    defaultHakyllReaderOptions
+    defaultHakyllWriterOptions
+      { writerHighlightStyle   = Just pandocCodeStyle
+      }
+
 postCtx :: Context String
 postCtx =
     dateField "date" "%B %e, %Y" `mappend`

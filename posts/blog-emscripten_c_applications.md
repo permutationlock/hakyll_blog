@@ -1,5 +1,5 @@
 ---
-title: Blog - writing c code to target the web
+title: Cross-compiling C for the web
 author: A.
 published: February 16, 2023
 tags: c, wasm
@@ -734,7 +734,7 @@ resize on web!
 
 If we want to have the canvas completely fill the
 browser window and eliminate any white edges, we can add a header
-with and some CSS styling to `static/index.html`.
+with some CSS styling to `static/index.html`.
 
 ```HTML
 <!-- static/index.html -->

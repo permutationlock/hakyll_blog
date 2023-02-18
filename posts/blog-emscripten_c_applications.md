@@ -1,96 +1,108 @@
 ---
-title: Blog - c web applications with emscripten
+title: Blog - writing c code to target the web
 author: A.
-published: February 15, 2023
+published: February 16, 2023
 tags: c, wasm
 ---
 
-In this post we will look at how to use [Emscripten][6] to make C
-applications compile to run in a web page. First, we'll get a basic
-"Hello, world!"
-working and look at how to tell the browser what to do with
-stdout and stderr. Then we'll look at getting more general
-file i/o working on the web. Finally, we'll get a full graphical app
-working with [Raylib][1], matching native behavior as close as possible.
+In this post we'll take a look at how to use [Clang][5] and
+[Emscripten][6] to make C code that can cross-compile to
+[WebAssembly][9] run in a web page.
 
-In order to follow along you will first need a C
-compiler; I will use [Clang][5], but feel free to use whatever you
-are comfortable with. Second, you will obviously need to have
+First, we will take a look at what [WebAssembly][9] is and how to
+compile simple functions to target the web with [Clang][5].
+Second, we will create a cross-platform "Hello, world!" app
+with [Emscripten][6]. Then we'll get more general
+file i/o working on the web. Finally, we will get a
+[Raylib][1] app set up to cross-compile to the browser.
+
+In order to follow along you will need the [Clang][5]
+compiler, including [llvm][10] and [lld][11].
+Second, you will need to have
 [Emscripten][6] installed. You will also need a web server to test
-your web builds; I will use [Go][7] and provide a simple server, but, again,
-use what you are comfortable with. I'll also use [make][3] to
-build projects and [git][8] to pull source code.
+your web builds; I will use [Go][7] and provide a simple server, but
+use whatever you are comfortable with. I'll also use [make][3] for
+build scrips and [git][8] to pull source code.
 
-All shell commands will be written assuming a Unix-like system.
+All shell commands will be written for a Unix-like system,
+I was on x86\_64 Linux.
 
-## Hello Emscripten
+## What is WebAssembly?
 
-Let's start by writing the classic C introductory program:
+When targeting web platforms, old methods would often translate
+native source code to JavaScript. In the past several years,
+however,
+a new option has become available: [WebAssembly][9]. WebAssembly
+provides a portable assembly language that strives to provide close
+to native performance in the web browser.
+
+It is important to note that WebAssembly really is just an assembly
+language: it can perform arithmetic, memory loads and stores,
+comprisons, jumps, and function calls, but not too much more.
+
+Let us take our favorite fibonacci function written in C and
+compile it to WASM so we can call it 
+in a JavaScript app. We'll start by making a new project
+directory and creating a
+`fibonacci.c` file.
 
 ```C
-// main.c
+// fibonacci.c
 
-#include <stdio.h>
+int fibonacci(int n) {
+    if(n <= 1) {
+        return n;
+    }
 
-int main() {
-    printf("Hello, emcc!\n");
-    return 0;
+    return fibonacci(n - 1) + fibonacci(n - 2);
 }
 ```
 
-Compiling and running this on our native platform we get the expected
-print out:
+The `clang` compiler can target `wasm32` (32 bit WebAssembly)
+right out of the box.
 
 ```bash
-> clang main.c -o hello
-> ./hello
-Hello, emcc!
+mkdir static
+clang fibonacci.c -o static/fibonacci.wasm --target=wasm32 \
+    --no-standard-libraries \
+    -Wl,--export-all -Wl,--no-entry
 ```
 
-In order to get this working in emscripten we need a little bit of
-setup. First, let us make a static directory for our webserver to
-host.
+The `--target=wasm32` flag tells the compiler to output 32bit
+WebAssembly. Next, `--no-standard-libraries` tells the compiler to
+omit libc as clang does not come with a WASM compatible
+implementation of libc; the libc on your local machine contains
+a lot of code that won't naturally translate to WASM such as
+operating system calls. Finally, `-Wl,--export-all` tells the linker
+to export all
+functions and `-Wl,--no-entry` tells the linker that we are not
+making a runable binary.
 
-```bash
-> mkdir static
-```
-
-Now we can compile our code with `emcc`. Note that `emcc` has three
-different output formats: HTML, JavaScript, and WebAssembly.
-
-Compiling to WebAssembly creates a raw `.wasm` file. Compiling to
-JavaScript
-adds a `.js` file containing a Module object that binds native
-functionality to
-the corresponding web features: e.g. stdout is mapped to
-`bash.log`. Finally, compiling to HTML adds an `.html` file that
-provides several features for testing: a canvas for graphical
-windows, an on page bash bash, etc.
-
-Since we are aiming to create
-a fully functioning web app, we will be making our own HTML file and
-compiling to JavaScript.
-
-```bash
-emcc main.c -o static/hello.js
-```
-
-Then we add a bare bones `static/index.html` file to load our compiled web
-app:
+Now that we have a `fibonacci.wasm` file containing our `fibonacci`
+function, we need to write an HTML file and a JavaScript snippet to
+load and run our WebAssembly.
 
 ```HTML
 <!-- static/index.html -->
 
+<!DOCTYPE html>
 <html>
-<script src="hello.js"></script>
+<script>
+fetch('fibonacci.wasm')
+    .then((response) => response.arrayBuffer())
+    .then((data) => WebAssembly.instantiate(data))
+    .then(
+        (inst) => console.log(
+            "The 6th Fibonacci number is " +
+            inst.exports.fibonacci(6)
+        )
+    );
+</script>
 </html>
 ```
 
-Looking in the static directory, we should now have our `index.html`
-file, as well as two `emcc` generated files: `hello.js` and
-`hello.wasm`.
 To test our web app we just need a web server to host it. I will be
-using the following Go web server:
+using the following Go web server.
 
 ```Go
 // server.go
@@ -113,45 +125,144 @@ func main() {
 }
 ```
 
-Now we can run our server:
+Run the webserver to host the `static/` directory.
 
 ```bash
-> go run server.go
+go run server.go
 ```
 
 Visiting [localhost:8081](http://localhost:8081) in a web browser
 will produce... a blank screen. But, if we open the developer
-bash, we see the expected output!
+console, we should see the expected output!
+
+```default
+The 6th Fibonacci number is 8
+```
+
+## Hello Emscripten
+
+In the last section we saw how simple functions can be compiled to
+WASM, but what if we want to make an entire application
+cross-platform? Well, at minimum we need an implementation of the C
+standard library that works in the browser (or I suppose you could
+implement a cross-platform standard library of your own as a
+replacement to libc).
+
+Luckily, there is an available solution: [Emscripten][6]! Emscripten
+provides the `emcc` compiler that implements a WASM libc
+and emulates many native features in the browser: file i/o, sockets,
+OpenGL graphics.
+
+Let's make our first Emscripten app the classic C intro program.
+
+```C
+// main.c
+
+#include <stdio.h>
+
+int main() {
+    printf("Hello, emcc!\n");
+    return 0;
+}
+```
+
+Compiling and running this on our native platform we should get the
+expected print out.
+
+```bash
+clang main.c -o hello
+./hello
+Hello, emcc!
+```
+
+In order to get this working in Emscripten we need a little bit of
+setup. First, let us make a static directory for our webserver to
+host.
+
+```bash
+mkdir static
+```
+
+Now we can compile our code with `emcc`. Note that `emcc` has three
+different output targets: HTML, JavaScript, and WebAssembly.
+
+Compiling to WebAssembly creates a raw `.wasm` file. Compiling to
+JavaScript
+adds a `.js` file containing a Module object that binds native
+functionality to
+the corresponding web features: e.g. stdout is mapped to
+`console.log`. Finally, compiling to HTML adds an `.html` file that
+provides several features for testing: a canvas for graphical
+windows, an on page console, etc.
+
+Since we are aiming to create
+a fully functioning web app, we will be making our own HTML file and
+compiling to JavaScript.
+
+```bash
+emcc main.c -o static/hello.js
+```
+
+Next we add a bare bones `static/index.html` file to load our compiled web
+app.
+
+```HTML
+<!-- static/index.html -->
+
+<!DOCTYPE html>
+<html>
+<script src="hello.js"></script>
+</html>
+```
+
+Looking in the static directory, we should now have our `index.html`
+file, as well as two `emcc` generated files: `hello.js` and
+`hello.wasm`.
+
+To test our web app we can host it using the same `server.go` file
+described earlier.
+
+```bash
+go run server.go
+```
+
+Visit [localhost:8081](http://localhost:8081), open the developer
+console, and we should see the greating!
 
 ### Configuring the Emscripten Module
 
 What if we wanted to change where stdout goes? Well, all we need to
 do is take a look at `hello.js`. The comment at the top of the file
-explains that the emscripten bindings are controlled via a `Module`
+explains that the Emscripten bindings are controlled via a `Module`
 object. The `Module` object can either be created and customized
 externally
 before the `hello.js` script is loaded, or a default Module will be
-created. At the bottom of the file, a function `run` is defined and
-called (as long `Module['noInitialRun']` is not true).
+created. At the bottom of the file a function `run` is defined and
+called (if `Module['noInitialRun']` is not `true`).
 
 Currently we are using the defualt `Module`. Looking through
 `hello.js` a
-bit more we can find the spot where stdout behaviour is defined:
+bit more we can find the spot where stdout and stderr
+behaviour is defined.
 
 ```JavaScript
 // hello.js | line 475
 
-var out = Module['print'] || bash.log.bind(bash);
-var err = Module['printErr'] || bash.warn.bind(bash);
+// ...
+
+var out = Module['print'] || console.log.bind(console);
+var err = Module['printErr'] || console.warn.bind(console);
+
+// ...
 ```
 
-If we want to set our own output, we can simply define the `Module`
-object and set `Moduel['print']` to whatever we want. Lets try it:
-
+If we want to set our own output function, we can simply define the
+`Module` object and set `Module['print']` to whatever we want.
 
 ```HTML
 <!-- static/index.html -->
 
+<!DOCTYPE html>
 <html>
 <script>
 var Module = {
@@ -163,8 +274,8 @@ var Module = {
 ```
 
 Now if we run the web server and open the page we get an annoying
-alert box with our message. It is probably best to switch print
-back to `bash.log` if you countinue using this project
+alert box with our message. It is probably best to switch
+back to `console.log` if you countinue using this project
 as a base for the following examples.
 
 ## File I/O
@@ -174,7 +285,7 @@ use for reading and writing data. Emscripten provides a way to
 emulate a somewhat limited version of this functionality.
 
 Starting from the basic hello emcc project created above,
-let us modify `main.c` as follows:
+let us modify `main.c` to open a file and print some of its contents.
 
 ```C
 // main.c
@@ -182,8 +293,6 @@ let us modify `main.c` as follows:
 #include <stdio.h>
 
 int main() {
-    printf("Hello, emcc!\n");
-
     char buffer[32] = { 0 };
     FILE* f = fopen("static/hello.txt", "r");
     fread(buffer, sizeof(char), 31, f);
@@ -194,25 +303,25 @@ int main() {
 }
 ```
 
-Next let us create that `static/hello.txt` file:
+Next we'll create a `static/hello.txt` file to be read by our app.
 
 ```bash
-> mkdir files
-> echo "I am a file!" > files/hello.txt
+mkdir files
+echo "I am a file!" > files/hello.txt
 ```
 
-Compiling and running on our local system, we get the desired result:
+Compiling and running on our local system, we get the expected
+output.
 
 ```bash
-> clang main.c -o hello
-> ./hello
-Hello, emcc!
+clang main.c -o hello
+./hello
 File contained: I am a file!
 
 ```
 
-However, if we compile and test our file on the web, the bash
-shows the following error:
+However, if we compile and test our file on the web, the console
+shows an error.
 
 ```default
 Uncaught (in promise) RuntimeError: index out of bounds
@@ -227,36 +336,37 @@ Uncaught (in promise) RuntimeError: index out of bounds
 ```
 
 We never told `emcc` about our `files/hello.txt` file, so of course the
-WebAssembly app cannot find the file. In order to package a file or
-directory of files to be packaged alongside our code, we need to use
-a flag to tell `emcc` to include them:
+WebAssembly app cannot find it. In order to package a file or
+directory of files alongside our code, we need to use
+a compiler flag to tell `emcc` to include them.
 
 ```bash
-> emcc main.c -o static/hello.js --preload-file files/
+emcc main.c -o static/hello.js --preload-file files/
 ```
 
 Looking in the static directory we now see that a third generated
 file has appeard: `hello.data`. Reloading our web app we should now
-see the same bash output that our native binary produced.
+see the same console output that our native binary produced.
 
 ## A resizable Raylib app
 
-Porting native command line applications to the web is clearly not
-that useful, so let's do something a bit more complicated. The goal
+Porting native command line applications to the web is not
+terribly useful, so let's do something a bit more complicated.
+The goal
 of this section is to create a resizable window drawing some centered
 text. On native this will be a standard window in whatever window
 manager is being used, e.g. X. On the web our "window" will be a
 canvas that fills the content area of the browser window and resizes
 with it.
 
+### Setup
+
 Start once again with the hello emcc example from the first section.
-For this project we will need to download the Raylib source code:
+For this project we will need to download the Raylib source code.
 
 ```bash
-> git clone https://github.com/raysan5/raylib.git
+git clone https://github.com/raysan5/raylib.git
 ```
-
-### Setup
 
 To compile Raylib for your local system you will need to follow the
 instructions found on the [GitHub readme][1]. The easiest way to get
@@ -264,35 +374,34 @@ Raylib working is to use a package manager to install the library and
 its dependencies. Local compilation examples below will assume that
 the Raylib libraries are already installed.
 
-The main focus of this section is getting
-Raylib apps working via emscripten which, thankfully, does not require
+Thankfully, compiling
+Raylib for the web does not require
 any dependencies other than the Raylib source and the `emcc`
 compiler.
-
-The Raylib Makefile contains the option to target web platforms. We
-will use the Makefile to build an emscripten compatible library file
-as follows:
+The Raylib library is written with Emscripten support
+and the `Makefile` has an option to target web platforms. Lets
+use `make` to build an Emscripten compatible library file.
 
 ```bash
-> mkdir libweb
-> cd raylib/src/
-> PLATFORM=PLATFORM_WEB make
-> cp libraylib.a ../../libweb/
-> cd ../../
+cd raylib/src/
+PLATFORM=PLATFORM_WEB make
+cd ../../
+mkdir libweb
+cp raylib/src/libraylib.a libweb/
 ```
 
 It will also be nice to grab the Raylib header file and put it in a
-dedicated include directory:
+dedicated include directory for our project.
 
 ```bash
-> mkdir include
-> cp raylib/src/raylib.h include/
+mkdir include
+cp raylib/src/raylib.h include/
 ```
 
 ### Drawing a square window
 
-Next let us modify main.c to have it create a 300 pixel square Raylib
-window and fill it with a dark gray background:
+Next let us modify main.c to use Raylib to create a 300 pixel square
+window and fill it with a dark gray background.
 
 ```c
 // main.c
@@ -313,11 +422,11 @@ int main() {
 ```
 
 Our build commands in this section will get fairly involved, so we
-will head things off by making a [makefile][3] (feel free to replace
+will head things off by making a [`Makefile`][3] (feel free to replace
 this with your build script of choice).
 
 ```bash
-# makefile
+# Makefile
 
 LOAD = -lraylib
 INCLUDE = -Iinclude
@@ -342,27 +451,28 @@ clean:
 	rm hello static/hello.js static/hello.wasm
 ```
 
-The commands produced by this makefile are:
+Running `make` with the above `Makefile` will produce the following
+build commands.
 
 ```bash
-> clang main.c -o hello -Iinclude -lraylib
-> emcc main.c -o static/hello.js -Iinclude -Llibweb \
->     -lraylib -s USE_GLFW=3 -s ASYNCIFY
+clang main.c -o hello -Iinclude -lraylib
+emcc main.c -o static/hello.js -Iinclude -Llibweb \
+    -lraylib -s USE_GLFW=3 -s ASYNCIFY
 ```
 
 The native build command assumes that Raylib is already
 in the main build path, i.e. installed via a package manager. You
-could modify the lib variable in the makefile to match your setup.
+could modify the variables in `Makefile` to match your setup.
 
-The `-s USE_GLFW=3` flag is necessary as the graphics code from
-Raylib will utilize [gflw][2]. The `-s ASYNCIFY` tells the compiler
+The `-s USE_GLFW=3` flag tells the compiler we will be using
+[gflw][2] version 3. The `-s ASYNCIFY` tells the compiler
 to modify our code to allow it to interact with asynchronous
 JavaScript. Currently our code is an infinite loop, which would block
 out all JavaScript events if taken literally. Both flags are
 necessary in our case because the Raylib library file requires them.
 
 You should now be able to run `make` to build for both native and
-web. Testing on web we now get the following error:
+web. Testing on web we should now get an error.
 
 ```default
 Uncaught (in promise) TypeError: Module.canvas is undefined
@@ -371,11 +481,12 @@ Uncaught (in promise) TypeError: Module.canvas is undefined
 Emscripten requires an HTML canvas to draw a graphical window. If we
 look through `staic/hello.js` we can find the relevant property is
 `Module['canvas']`. Let us modify our HTML file to add a canvas
-element:
+element.
 
 ```HTML
 <!-- static/hello.js -->
 
+<!DOCTYPE html>
 <html>
     <body>
         <canvas id="canvas"></canvas>
@@ -397,7 +508,7 @@ Currently our code on both native and the web runs a simple infinite
 loop. On the web it is much better to run an "asynchronous loop,"
 that is, define a function that contains the body of the loop and
 have the browser regularly call that function to request animation
-frames. To do this we will modify our code as follows:
+frames.
 
 ```c
 // main.c
@@ -431,14 +542,14 @@ int main() {
 
 The `#ifdef __EMSCRIPTEN__` preprocessor condition allows us to check
 whether the `emcc` compiler is being used. If the compiler is `emcc`,
-we set `update` as the emscripten main loop callback function.
+we set `update` as the Emscripten main loop callback function.
 Otherwise we simply run the animation loop as normal.
 
 ### Making the window resizable
 
 In order to make a window resizable in a native Raylib application,
-we simply need to add the following line just before calling
-`InitWindow`:
+we simply need to set a config flag before calling
+`InitWindow`.
 
 ```C
 // main.c
@@ -452,7 +563,7 @@ we simply need to add the following line just before calling
 ```
 
 Let us also make the `update` function draw some centered text so we
-can make sure that resizing is working correctly:
+can ensure that window resizing is re-drawing correctly.
 
 ```C
 // main.c
@@ -500,7 +611,7 @@ window resize.
 The solution is to do things manually by taking advantage of another
 feature of
 Emscripten: [cwrap][4]. We will first need to create a C function
-that should be called whenever the canvas is resized:
+that should be called whenever the canvas is resized.
 
 ```C
 // main.c
@@ -516,8 +627,9 @@ extern void on_resize(int width, int height) {
 // ...
 ```
 
-Then we will add the following compile flags to our Makefile to tell
-`emcc` to export our new `on_resize` function in addition to `main`:
+Then we will add the following compile flags to our `Makefile` to
+tell `emcc` to export our new `on_resize` function in addition to
+`main`.
 
 ```bash
 # Makefile
@@ -535,10 +647,12 @@ We also tell `emcc` to generate `cwrap` functionality which allows us
 to wrap exported C functions as JavaScript functions.
 
 If we call `make` with our updated `Makefile` and look through
-`static/hello.js` we can find the defintion of `cwrap`:
+`static/hello.js` we can find the defintion of `cwrap`.
 
 ```JavaScript
 // static/hello.js | line 8451
+
+// ...
 
 /**
  * @param {string=} returnType
@@ -546,28 +660,29 @@ If we call `make` with our updated `Makefile` and look through
  * @param {Object=} opts
  */
 function cwrap(ident, returnType, argTypes, opts) {
-  return function() {
-    return ccall(ident, returnType, argTypes, arguments, opts);
-  }
+    return function() {
+        return ccall(ident, returnType, argTypes, arguments, opts);
+    }
 }
+
+// ...
 ```
 
 Not delving too much into the inner workings,
 `Module.cwrap` requires three
 arguments: `ident` is the name of the exported C function to
 be wrapped, `returnType` is the return type, and `argTypes` is an
-array indicating the function arguments. The JavaScript equivalent of
-our function `void on_resize(int, int)` is
-`on_resize(number,number)`. Therefore `ident` should
-be `on_resize`, `returnType` should be `null`, and `argTypes` should
-be `[number, number]`.
+array indicating the function arguments. In our case `ident` should
+be `"on_resize`", `returnType` should be `null`, and `argTypes`
+should be `[number, number]`.
 
 To put our newly exported function into use with `cwrap` we need to
-make some major modifications to `static/index.html`:
+make some major modifications to `static/index.html`.
 
 ```HTML
 <!-- static/index.html -->
 
+<!DOCTYPE html>
 <html>
     <body>
         <canvas id="canvas"></canvas>
@@ -618,8 +733,8 @@ Recompiling, everything should work as expected and the window should
 resize on web!
 
 If we want to have the canvas completely fill the
-browser window and eliminate any white edges, we can simply add the
-following header tag to `static/index.html`:
+browser window and eliminate any white edges, we can add a header
+with and some CSS styling to `static/index.html`.
 
 ```HTML
 <!-- static/index.html -->
@@ -642,7 +757,8 @@ following header tag to `static/index.html`:
 <!-- ... -->
 ```
 
-Our complete files at the end should look as follows:
+Finally, here is a complete look at the three files we wrote in
+this section.
 
 ```C
 // main.c
@@ -702,9 +818,10 @@ int main() {
 ```HTML
 <!-- static/index.html -->
 
+<!DOCTYPE html>
 <html>
     <head>
-        <title>Hello emscripten</title>
+        <title>Hello Emscripten</title>
         <style>
             * {
                 padding: 0;
@@ -788,3 +905,6 @@ clean:
 [6]: https://emscripten.org/
 [7]: https://go.dev/
 [8]: https://git-scm.com/
+[9]: https://webassembly.org/
+[10]: https://llvm.org/
+[11]: https://lld.llvm.org/

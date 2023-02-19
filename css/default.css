@@ -8,21 +8,24 @@ body {
 body a {
     text-decoration: none;
 }
+.tags {
+    padding-top: 1em;
+}
 .section a:visited {
     color: #7f8c8d;
 }
 .section a:link {
-    color: #2980b9;
-}
-.section a:hover {
     color: #3daee9;
 }
-.section a:active {
+.section a:hover {
     color: #2980b9;
 }
+.section a:active {
+    color: #3daee9;
+}
 
-.section h1 { font-size: 1.4em; }
-.section h2 { font-size: 1.3em; }
+.section h1 { font-size: 1.5em; }
+.section h2 { font-size: 1.35em; }
 .section h3 { font-size: 1.2em; }
 
 .active {
@@ -30,6 +33,7 @@ body a {
 }
 
 .header {
+    padding-top: 1em;
     text-align: center;
 }
 
@@ -40,16 +44,16 @@ body a {
 .header a {
     margin-left: 1ch;
     margin-right: 1ch;
-    font-size: 1.4em;
+    font-size: 1.75em;
 }
 .header a:link, a:visited {
     color: #eff0f1;
 }
 .header a:hover {
-    color: #3daee9;
+    color: #2980b9;
 }
 .header a:active {
-    color: #2980b9;
+    color: #3daee9;
 }
 
 .postHeader {
@@ -61,9 +65,10 @@ body a {
     width: device-width;
     max-width: 70ch;
     float: center;
+    padding-top: none;
+    padding-bottom: none;
     padding-left: 1ch;
     padding-right: 1ch;
-    padding-top: 0.5ch;
     text-align: justify;
     text-justify: inter-word;
     margin: auto;
@@ -86,4 +91,16 @@ ul li {
     padding-right: 1ch;
     margin: auto;
     text-align: center;
+}
+.footer a:visited {
+    color: #3daee9;
+}
+.footer a:link {
+    color: #3daee9;
+}
+.footer a:hover {
+    color: #2980b9;
+}
+.footer a:active {
+    color: #3daee9;
 }

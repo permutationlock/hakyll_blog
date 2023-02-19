@@ -23,9 +23,11 @@
     </head>
     <body>
         <header class="header">
-            <h1>Permutationlock</h1>
+            <!--<h1>Permutationlock</h1> -->
             <nav>
-                <a href="/"$if(page-posts)$class="active"$endif$>Blog</a>
+                <a href="/"$if(page-posts)$class="active"$endif$>
+                    Posts
+                </a>
                 <a href="/about.html" $if(page-about)$class="active"$endif$>About</a>
                 <!-- <a href="/quotes.html"
                     $if(page-quotes)$class="active"$endif$>Quotes</a>-->
@@ -34,9 +36,7 @@
 
         <main role="main">
             <div class="section">
-                <hr>
                 $body$
-                <hr>
             </div>
         </main>
 

@@ -1,10 +1,10 @@
-<section>
+<section class=tags>
 $if(untagged)$
-<b>Tags: </b>$for(tagsList)$<a href="/tags/$tag$.html">$tag$</a>&nbsp;$endfor$
+Tags: $for(tagsList)$<a href="/tags/$tag$.html">$tag$</a>&nbsp;$endfor$
 $endif$
 </section>
 
 <section>
-$if(untagged)$$else$<b>$title$ (<a href="/">clear tag</a>):</b>$endif$
+$if(untagged)$$else$$title$ (<a href="/">clear tag</a>):$endif$
 $partial("templates/post-list.html")$
 </section>

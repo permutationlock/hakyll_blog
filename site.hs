@@ -118,9 +118,21 @@ pandocCompiler' =
       { writerHighlightStyle   = Just pandocCodeStyle
       }
 
+youtubeCtx :: Context a
+youtubeCtx = field "youtube" $ \item -> do
+    metadata <- getMetadata (itemIdentifier item)
+    return $ fromMaybe "" $ lookupString "youtube" metadata
+
+gitCtx ::  Context String
+gitCtx = field "git" $ \item -> do
+    metadata <- getMetadata (itemIdentifier item)
+    return $ fromMaybe "" $ lookupString "git" metadata
+
+
 postCtx :: Context String
 postCtx =
     dateField "date" "%B %e, %Y" `mappend`
+    metadataField `mappend`
     defaultContext
 
 postCtxWithTags :: Tags -> Context String

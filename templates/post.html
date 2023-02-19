@@ -2,18 +2,22 @@
     <section class="postHeader">
         <h1>$title$</h1>
         $if(date)$
-        Posted on $date$
+        $date$
         $endif$
-        $if(author)$
-            by $author$
+        $if(tags)$
+        &nbsp|&nbsp
+        $for(tagsList)$<a href="/tags/$tag$.html">$tag$</a>&nbsp;$endfor$
+        $endif$
+        $if(git)$
+        |&nbsp
+        <a href=$git$>GitHub</a>
+        $endif$
+        $if(youtube)$
+        &nbsp|&nbsp
+        <a href=$youtube$>YouTube</a>
         $endif$
     </section>
     <section>
         $body$
     </section>
-    $if(tags)$
-    <section>
-        <b>Tags: </b>$for(tagsList)$<a href="/tags/$tag$.html">$tag$</a>&nbsp;$endfor$
-    </section>
-    $endif$
 </article>

@@ -3,11 +3,12 @@ title: Cross-compiling C for the web
 author: A.
 published: February 16, 2023
 tags: c, wasm
+git: https://github.com/permutationlock/emscripten_c_examples
 ---
 
 In this post we'll take a look at how to use [Clang][5] and
 [Emscripten][6] to make C code that can cross-compile to
-[WebAssembly][9] run in a web page.
+[WebAssembly][9] and run in a web page.
 
 First, we will take a look at what [WebAssembly][9] is and how to
 compile simple functions to target the web with [Clang][5].
@@ -17,7 +18,7 @@ file i/o working on the web. Finally, we will get a
 [Raylib][1] app set up to cross-compile to the browser.
 
 In order to follow along you will need the [Clang][5]
-compiler, including [llvm][10] and [lld][11].
+compiler and [lld][11].
 Second, you will need to have
 [Emscripten][6] installed. You will also need a web server to test
 your web builds; I will use [Go][7] and provide a simple server, but
@@ -35,10 +36,6 @@ however,
 a new option has become available: [WebAssembly][9]. WebAssembly
 provides a portable assembly language that strives to provide close
 to native performance in the web browser.
-
-It is important to note that WebAssembly really is just an assembly
-language: it can perform arithmetic, memory loads and stores,
-comprisons, jumps, and function calls, but not too much more.
 
 Let us take our favorite fibonacci function written in C and
 compile it to WASM so we can call it 
@@ -68,7 +65,7 @@ clang fibonacci.c -o static/fibonacci.wasm --target=wasm32 \
     -Wl,--export-all -Wl,--no-entry
 ```
 
-The `--target=wasm32` flag tells the compiler to output 32bit
+The `--target=wasm32` flag tells the compiler to output 32 bit
 WebAssembly. Next, `--no-standard-libraries` tells the compiler to
 omit libc as clang does not come with a WASM compatible
 implementation of libc; the libc on your local machine contains
@@ -88,13 +85,10 @@ load and run our WebAssembly.
 <!DOCTYPE html>
 <html>
 <script>
-fetch('fibonacci.wasm')
-    .then((response) => response.arrayBuffer())
-    .then((data) => WebAssembly.instantiate(data))
-    .then(
-        (inst) => console.log(
+WebAssembly.instantiateStreaming(fetch("fibonacci.wasm"), {}).then(
+        (obj) => console.log(
             "The 6th Fibonacci number is " +
-            inst.exports.fibonacci(6)
+            obj.instance.exports.fibonacci(6)
         )
     );
 </script>
@@ -149,9 +143,8 @@ implement a cross-platform standard library of your own as a
 replacement to libc).
 
 Luckily, there is an available solution: [Emscripten][6]! Emscripten
-provides the `emcc` compiler that implements a WASM libc
-and emulates many native features in the browser: file i/o, sockets,
-OpenGL graphics.
+provides the `emcc` compiler which emulates POSIX operating system
+features in the browser, including web compatible libc and OpenGL.
 
 Let's make our first Emscripten app the classic C intro program.
 
@@ -166,7 +159,7 @@ int main() {
 }
 ```
 
-Compiling and running this on our native platform we should get the
+Compiling and running this on our local system we should get the
 expected print out.
 
 ```bash
@@ -282,7 +275,7 @@ as a base for the following examples.
 
 When running a native application we have a local file system to
 use for reading and writing data. Emscripten provides a way to
-emulate a somewhat limited version of this functionality.
+emulate this functionality.
 
 Starting from the basic hello emcc project created above,
 let us modify `main.c` to open a file and print some of its contents.
@@ -346,16 +339,18 @@ emcc main.c -o static/hello.js --preload-file files/
 
 Looking in the static directory we now see that a third generated
 file has appeard: `hello.data`. Reloading our web app we should now
-see the same console output that our native binary produced.
+see the same console output that our local binary produced.
 
 ## A resizable Raylib app
 
-Porting native command line applications to the web is not
+Porting command line applications to the web is not
 terribly useful, so let's do something a bit more complicated.
 The goal
 of this section is to create a resizable window drawing some centered
-text. On native this will be a standard window in whatever window
-manager is being used, e.g. X. On the web our "window" will be a
+text. On our local system this will be a standard window in whatever
+window
+manager is being used, e.g. [X][12]. On the web our "window" will
+be a
 canvas that fills the content area of the browser window and resizes
 with it.
 
@@ -460,7 +455,7 @@ emcc main.c -o static/hello.js -Iinclude -Llibweb \
     -lraylib -s USE_GLFW=3 -s ASYNCIFY
 ```
 
-The native build command assumes that Raylib is already
+The `clang` build command assumes that Raylib is already
 in the main build path, i.e. installed via a package manager. You
 could modify the variables in `Makefile` to match your setup.
 
@@ -504,11 +499,12 @@ Refreshing the page, we now see a 300 pixel gray square.
 
 ### Using the Emscripten animation loop
 
-Currently our code on both native and the web runs a simple infinite
-loop. On the web it is much better to run an "asynchronous loop,"
-that is, define a function that contains the body of the loop and
-have the browser regularly call that function to request animation
-frames.
+Currently our code runs a simple infinite loop no matter the
+platform.
+On the web it is best practice to run an "asynchronous loop,"
+that is, to define a function that contains the body of the loop and
+then have the browser regularly call that function to request
+animation frames.
 
 ```c
 // main.c
@@ -543,7 +539,7 @@ int main() {
 The `#ifdef __EMSCRIPTEN__` preprocessor condition allows us to check
 whether the `emcc` compiler is being used. If the compiler is `emcc`,
 we set `update` as the Emscripten main loop callback function.
-Otherwise we simply run the animation loop as normal.
+Otherwise, we simply run the animation loop as normal.
 
 ### Making the window resizable
 
@@ -563,7 +559,7 @@ we simply need to set a config flag before calling
 ```
 
 Let us also make the `update` function draw some centered text so we
-can ensure that window resizing is re-drawing correctly.
+can ensure that window is re-drawing correctly.
 
 ```C
 // main.c
@@ -603,9 +599,10 @@ still doesn't resize.
 
 The first
 issue is that the "window" in the context of the
-web application is the canvas, not the browser window. Simply making the canvas resize with the page does not fix the
-problem as
-Emscripten will not recognize the canvas resizing as a native
+web application is the canvas, not the browser window. However,
+simply making the canvas fill the browser window does not fix the
+problem since
+Emscripten does not emulate the canvas resizing as a
 window resize.
 
 The solution is to do things manually by taking advantage of another
@@ -717,7 +714,7 @@ make some major modifications to `static/index.html`.
             canvas: document.getElementById('canvas'),
         };
     </script>
-    <script async src="hello.js"></script>
+    <script src="hello.js"></script>
 </html>
 ```
 
@@ -865,7 +862,7 @@ int main() {
             canvas: document.getElementById('canvas'),
         };
     </script>
-    <script async src="hello.js"></script>
+    <script src="hello.js"></script>
 </html>
 ```
 
@@ -908,3 +905,4 @@ clean:
 [9]: https://webassembly.org/
 [10]: https://llvm.org/
 [11]: https://lld.llvm.org/
+[12]: https://en.wikipedia.org/wiki/X_Window_System

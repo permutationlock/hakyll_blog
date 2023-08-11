@@ -104,6 +104,9 @@ main = do
                     >>= relativizeUrls
 
         match "templates/*" $ compile templateBodyCompiler
+        match "images/*" $ do
+            route   idRoute
+            compile copyFileCompiler
 
 
 --------------------------------------------------------------------------------

@@ -68,13 +68,13 @@ P &= \prod_{i=1}^{n-1}\left(1-\frac{i}{2^{8b}}\right)\\
 \end{align*}
 $$
 
-This gives us an easily computable approximation. Plugging in some
-numbers we can see that
-if room codes are 4 bytes then $P\approx 6.1\times 10^{-5}$ and
-if they are 8 bytes then $P\approx 1.4\times 10^{-14}$.
+This gives us an easily computable approximation. Plugging
+numbers for the case that we have 256 game rooms finds that
+if room codes are 4 bytes then $1-P\approx 6.1\times 10^{-5}$ and
+if codes are 8 bytes then $1-P\approx 1.4\times 10^{-14}$.
 
 **Note 1:** it's actually not too bad in our case to compute the
-original probability directly, but I thought working out the
+original probability directly, but working out the
 approximation
 was interesting so I
 still wrote it up.

@@ -14,22 +14,18 @@ Links:
 
 Current projects:
 
- - [Simple Game Server v2](https://github.com/permutationlock/sgs_zig):
-   a fixed memory single threaded game server with session
-   reconnection and persistent accounts, written in
-   [Zig](https://ziglang.org/) using [monocypher](https://monocypher.org),
-   [wyhash](https://github.com/wangyi-fudan/wyhash), and
-   [s2s](https://github.com/ziglibs/s2s).
+ - [Zig Type Traits](https://github.com/permutationlock/zig_type_traits):
+   an implementation of Rust-style type traits for [Zig](https://ziglang.org/).
 
- - Travelog: an implementation of the
+ - [Thierd](https://github.com/permutationlock/thierd):
+   a fixed memory single threaded game server with WebSocket support.
+
+ - Travelog: a Zig implementation of the
    [Warren Abstract Machine](https://en.wikipedia.org/wiki/Warren_Abstract_Machine)
-   and a corresponding [Prolog](https://en.wikipedia.org/wiki/Prolog)
-   compiler.
+   and matching [Prolog](https://en.wikipedia.org/wiki/Prolog) compiler.
 
  - [Pi Travelogue](posts/blog-birthday-gps.html): a Raspberry Pi dashboard
-   console for use as a
-   driving GPS with [FoxtrotGPS](https://www.foxtrotgps.org/) and for filming
-   geotagged timelapses.
+   GPS console using [FoxtrotGPS](https://www.foxtrotgps.org/).
 
  - [Krynth](https://permutationlock.com/krynth/): a collection of games and
    tools concerning a particular style of deduction puzzles.

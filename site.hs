@@ -2,7 +2,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 import Data.Monoid (mappend)
 import Data.Maybe
+import Data.Map
 import Data.List
+import Data.Either
+import Skylighting ( SyntaxMap, defaultSyntaxMap )
+import Skylighting.Loader ( loadSyntaxesFromDir )
 import Text.Pandoc.Definition
 import Text.Pandoc.Highlighting (Style, breezeDark, styleToCss)
 import Text.Pandoc.Options (ReaderOptions (..), WriterOptions (..))
@@ -15,6 +19,8 @@ import Hakyll.Web.Pandoc
 --------------------------------------------------------------------------------
 main :: IO ()
 main = do
+    syntaxOrErr <- loadSyntaxesFromDir "syntax"
+    let customSyntaxMap = fromRight Data.Map.empty syntaxOrErr
     hakyll $ do
         match "css/*" $ do
             route   idRoute
@@ -28,7 +34,7 @@ main = do
             compile $ do
                 tagsList <- (getUnderlying >>= getTags)
                 let ctx = (postCtxWithTagList tagsList)
-                pandocCompiler'
+                pandocCompiler' customSyntaxMap
                     >>= loadAndApplyTemplate "templates/post.html" ctx
                     >>= loadAndApplyTemplate "templates/default.html" ctx
                     >>= relativizeUrls
@@ -38,7 +44,7 @@ main = do
             route idRoute
             compile $ do
                 posts <- recentFirst =<< loadAll pattern
-                let ids = map itemIdentifier posts
+                let ids = Data.List.map itemIdentifier posts
                 tagsList <- nub . concat <$> traverse getTags ids
                 let ctx = constField "title" title
                           `mappend` postCtxWithTagList tagsList
@@ -54,7 +60,7 @@ main = do
         match "pages/*.md" $ do
             route $ setExtension "html"
             compile $ do
-                pandocCompiler'
+                pandocCompiler' customSyntaxMap
                     >>= loadAndApplyTemplate "templates/post.html" postCtx
                     >>= loadAndApplyTemplate "templates/default.html" postCtx
                     >>= relativizeUrls
@@ -63,7 +69,7 @@ main = do
             route idRoute
             compile $ do
                 posts <- recentFirst =<< loadAll "posts/*"
-                let ids = map itemIdentifier posts
+                let ids = Data.List.map itemIdentifier posts
                 tagsList <- nub . concat <$> traverse getTags ids
                 let blogCtx =
                         constField "title" "Posts" `mappend`
@@ -89,7 +95,7 @@ main = do
                 let cvCtx =
                         constField "page-quotes" "" `mappend`
                         defaultContext
-                pandocCompiler'
+                pandocCompiler' customSyntaxMap
                     >>= loadAndApplyTemplate "templates/default.html" cvCtx
                     >>= relativizeUrls
 
@@ -99,7 +105,7 @@ main = do
                 let aboutCtx =
                         constField "page-about" "" `mappend`
                         defaultContext
-                pandocCompiler'
+                pandocCompiler' customSyntaxMap
                     >>= loadAndApplyTemplate "templates/default.html" aboutCtx
                     >>= relativizeUrls
 
@@ -113,12 +119,13 @@ main = do
 pandocCodeStyle :: Style
 pandocCodeStyle = breezeDark
 
-pandocCompiler' :: Compiler (Item String)
-pandocCompiler' =
+pandocCompiler' :: SyntaxMap -> Compiler (Item String)
+pandocCompiler' customSyntaxMap =
   pandocCompilerWith
     defaultHakyllReaderOptions
     defaultHakyllWriterOptions
-      { writerHighlightStyle   = Just pandocCodeStyle
+      { writerHighlightStyle   = Just pandocCodeStyle,
+        writerSyntaxMap = (Data.Map.union customSyntaxMap defaultSyntaxMap)
       }
 
 youtubeCtx :: Context a

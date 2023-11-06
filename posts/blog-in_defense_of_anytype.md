@@ -10,9 +10,9 @@ Generics in Zig often get a bad wrap, particularly `anytype`. While I love a
 good robust type system like those found in Haskell or Rust, I have
 come to really appreciate the simplicity of Zig generics.
 
-This article will cover a few common patterns for working with `anytype`
-parameters. I hope to show that a decent level of "type robustness"
-can be achieved in Zig with a few design decisions.
+This article will cover a couple common patterns for working with `anytype`
+parameters, and then introduce my [trait library][1] as a potential
+strategy for managing complicated generic types.
 
 ## An example situation
 
@@ -60,12 +60,16 @@ to respond to reported events.
 **Note:** There are other ways to tackle the problem, but for this article I am
 only interested in compile-time generics.
 
-## Option 1: use duck-typing
+## Option 1: use duck typing
 
 Zig allows generic functions to take `anytype` parameters, generating
 a new concrete function at compile-time for each different parameter
-type used. Compile time [duck-typing][2] is used to verify that the passed
+type used. Compile time [duck typing][2] is used to verify that the passed
 parameters have the required declarations and fields.
+
+**Note:** In general, it is considered good practice to avoid directly accessing
+the fields of generic parameters. Functions in this article will never
+expect a generic type to have any specific fields.
 
 A `poll` function for our `Server` struct using `anytype` is provided below.
 
@@ -89,8 +93,15 @@ pub const Server = struct {
 }
 ```
 
-Someone using our library could then write their own simple server
-that logs the reported events.
+The biggest downside of duck typing
+is that it is not immediately clear
+from the function signature of `poll` what can be passed in for the
+`handler` parameter.
+Someone using our library would need to read the function body of `poll`,
+track down the return type of `Server.receive`, and then find the definition of
+`Server.Event`.
+
+Below is a simple example server using a `handler` to logs events.
 
 ```Zig
 const std = @import("std");
@@ -101,15 +112,15 @@ const Server = my_server_lib.Server;
 const Handle = Server.Handle;
 
 pub const LogHandler = struct {
-    msg_count: usize = 0,
+    count: usize = 0,
 
     pub fn onOpen(_: *Self, handle: Handle) void {
         log.info("connection {} opened", .{ handle });
     }
 
     pub fn onMessage(self: *Self, handle: Handle, msg: []const u8) void {
-        log.info("{d} - client {d} sent: {s}", .{ self.msg_count, handle, msg });
-        self.msg_count += 1;
+        log.info("{d}: client {d} sent '{s}'", .{ self.count, handle, msg });
+        self.count += 1;
     }
 
     pub fn onClose(_: *Self, handle: Handle) void {
@@ -127,21 +138,11 @@ pub fn main() void {
 }
 ```
 
-The most common complaint that you will hear about using `anytype` in this way
-is that it is not immediately clear to a reader what can be passed as the
-`handler` parameter of `poll`.
-A library user would need to read the function body, track down the
-return type of `Server.receive`, and then find the definition of
-`Server.Event`.
-
-With a bit of documentation, however, duck-typing can certainly
-be a viable option.
-
 ## Option 2: use explicit function parameters 
 
-An easy way to provide clarity is to simply not rely on duck-typing.
-Everywhere you would have relied on th existence of a type declaration,
-instead require the caller to pass an additional parameter.
+One way to provide clarity is to use `anytype` but never rely on duck typing.
+Everytime you would have relied on the existence of a type declaration,
+instead require the caller to pass an additional comptime parameter.
 
 ```Zig
 // ...
@@ -149,9 +150,9 @@ instead require the caller to pass an additional parameter.
 pub fn poll(
     self: *Self,
     handler: anytype, 
-    onOpen: fn (@TypeOf(handler), Handle) void,
-    onMessage: fn (@TypeOf(handler), Handle, Message) void,
-    onClose: fn (@TypeOf(handler), Handle) void
+    comptime onOpen: fn (@TypeOf(handler), Handle) void,
+    comptime onMessage: fn (@TypeOf(handler), Handle, Message) void,
+    comptime onClose: fn (@TypeOf(handler), Handle) void
 ) void {
     const updated_handles = self.pollInternal();
     for (updated_handles) |handle| {
@@ -198,8 +199,9 @@ don't support declarations, e.g. numeric types.
 In this section I will assume that you have at least skimmed the readme of
 my [Zig type trait library][1].
 
-Let us revisit the duck-typing example from option 1, but this time add
-explicit type checking using traits. We can define a `Handler` trait as follows.
+Let us revisit the duck typing example, but this time add our own
+explicit type checking using traits. We'll first define a `Handler` trait as
+follows.
 
 ```Zig
 pub fn Handler(comptime Type: type) type {
@@ -211,7 +213,7 @@ pub fn Handler(comptime Type: type) type {
 }
 ```
 
-Then we add a trait verification line at the top of `Server.poll`.
+Then we simply add a trait verification line at the top of `Server.poll`.
 
 ```Zig
 // ...
@@ -246,18 +248,11 @@ own conventions and helper functions.
 
 ### Going a step further with interfaces
 
-Using explicit type checking relies on the library writer to manually
-ensure that type checks stay up to date with how generic parameters
-are actually used. A technique to force type checks to match up exactly
-is to use an interface struct to indirectly access generic types.
-My trait library provides `trait.Interface` to generate such an interface
-struct.
-
-The `Interface` comptime function takes a type `T` and a trait (or tuple
-of traits), verifies that `T` implements the trait(s), and returns an
-instance of a struct containing one field for each declaration of the
-trait(s). The value of each field of the struct is set equal to the
-corresponding declaration of `T`.
+Explicit type checking relies on the library writer to
+ensure that checks are up to date with how generic parameters
+are actually used. My trait library provides the comptime function
+`Interface` to generate an interface that only provides
+access to the declarations of a type that match a given set of traits.
 
 A version of `Server.poll` using interfaces is provided below.
 
@@ -281,9 +276,9 @@ pub fn poll(self: *Self, handler: anytype) void {
 // ...
 ```
 
-As long as the `handler` parameter is only used with the function fields of
-`HandlerIfc`, we guarantee that the `Handler` trait
-defines "necessary and sufficient" conditions for the type of `handler`.
+So long as the `handler` parameter is only used with the functions of
+`HandlerIfc`, the `Handler` trait is guaranteed to
+define "necessary and sufficient" conditions for the type of `handler`.
 
 [1]: https://github.com/permutationlock/zig_type_traits
-[2]: https://ziglang.org/documentation/master/#Introducing-the-Compile-Time-Concept
+[2]: https://en.wikipedia.org/wiki/Duck_typing

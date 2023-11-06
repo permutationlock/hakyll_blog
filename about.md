@@ -8,7 +8,6 @@ I do programming, electronics, and math. Occasionally I write about
 these things here.
 
 Links:
-[Resume](https://permutationlock.com),
 [GitHub](https://github.com/permutationlock),
 [Letterboxd](https://letterboxd.com/kieroda/)
 
@@ -23,7 +22,7 @@ Current projects:
    and matching [Prolog](https://en.wikipedia.org/wiki/Prolog) compiler.
  - [Pi Travelogue](posts/blog-birthday-gps.html): a Raspberry Pi dashboard
    GPS console using [FoxtrotGPS](https://www.foxtrotgps.org/).
- - [Krynth](https://permutationlock.com/krynth/): a collection of games and
+ - [Krynth](https://github.com/permutationlock/krynth_raylib): a collection of games and
    tools concerning a particular style of deduction puzzles.
 
 This site was generated using [Hakyll](https://jaspervdj.be/hakyll/).

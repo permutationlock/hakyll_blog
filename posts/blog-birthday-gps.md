@@ -8,11 +8,6 @@ tags: electronics
 Around seven years ago I bought a Raspberry Pi, a GPS HAT, and a webcam.
 The idea was to build a simple device to attach to bike handlebar bag and
 generate a geotagged timelapse of a bike tour.
-As these things often go, I got distracted with other projects.
-
-A while later, I came back to
-the project with the new idea to make a GPS console with a 7" touchscreen
-display.
 Alas, I became obsesed with algebraic geomtery. I ended up doing
 nothing but mathematics for four years, completely 
 forgotting about my electronics box... Until a few months ago.
@@ -22,6 +17,9 @@ the past several years they have slowly turned a Promaster into a really cool
 adventure camper. With my dad's birthday coming I up, I had the idea to
 drag my old GPS project out from the basement and construct a
 dashboard console for their van.
+
+I had a 7 inch touchscreen kicking around from an unrelated electronics project,
+and so it seemed that I had everything I needed to get started.
 
 ![I know, I did a horrible job soldering.](../images/blog-birthday-gps-solder.jpg)
 

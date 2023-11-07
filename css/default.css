@@ -4,6 +4,19 @@ body {
     background-color: #31363b;
     color: #eff0f1;
     font-size: 1em;
+    line-height: 1.25;
+}
+sub, sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sup {
+  top: -0.5em;
+}
+sub {
+  bottom: -0.25em;
 }
 body a {
     text-decoration: none;
@@ -118,4 +131,18 @@ ul li {
 }
 .footer a:active {
     color: #3daee9;
+}
+
+.footnotes {
+    font-size: 0.875em;
+}
+
+.footnotes li {
+    margin-top: 0.25ch;
+    margin-bottom: 0.25ch;
+}
+
+.footnotes p {
+    margin: 0;
+    padding: 0;
 }

@@ -145,7 +145,7 @@ implement a cross-platform standard library of your own as a
 replacement to libc).
 
 Luckily, there is an available solution: [Emscripten][6]! Emscripten
-provides the `emcc compiler and linker which emulates POSIX operating
+provides the `emcc` compiler and linker which emulates POSIX operating
 system features in the browser, including a web compatible libc and OpenGL.
 
 Let's make the classic C intro program.
@@ -190,7 +190,7 @@ different output targets:
    provides several features for testing, such as a
    canvas for graphical windows and an in page console.
 
-The best way to learn about how emcc works, in my opinion, is to
+The best way to learn about how `emcc` works, in my opinion, is to
 simply read through the generated Javascript bindings.
 In this post I will outline how to create our own HTML file to
 make use of the emcc generated WASM and JavaScript files.
@@ -280,7 +280,7 @@ When running a native application we have a local file system to
 use for reading and writing data. Emscripten provides a way to
 emulate this functionality.
 
-Starting from the basic hello emcc project created above,
+Starting from the basic "hello emcc" project created above,
 let us modify `main.c` to open a file and print some of its contents.
 
 ```C

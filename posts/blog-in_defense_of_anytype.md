@@ -6,13 +6,14 @@ tags: zig
 git: https://github.com/permutationlock/zig_type_traits
 ---
 
-Generics in Zig often get a bad wrap, particularly `anytype`. While I love a
-good robust type system like those found in Haskell or Rust, I have
-come to really appreciate the simplicity of Zig generics.
+Generics in Zig often get a bad wrap, particularly the `anytype` keyword.
+Personally, while I also love working with the
+robust type systems found in languages like Haskell and Rust, I have come
+to really appreciate Zig's "`type` as a first class type" approach to generics.
 
 This article will cover a couple common patterns for working with `anytype`
-parameters, and then introduce my [trait library][1] as a potential
-strategy for managing complicated generic types.
+parameters, and introduce my [trait library][1] as an option
+for managing complicated generic types.
 
 ## An example situation
 
@@ -20,7 +21,7 @@ Suppose that we are writing a networking library and have created a
 `Server` struct
 that will accept and manage TCP connections. We would like `Server`
 to exposes a `poll` function that will poll for events on the
-server's internal collection of sockets.
+`Server`'s internal collection of sockets.
 
 There are three possible events that we want to handle: client connection,
 message received, and client disconnection.
@@ -37,39 +38,31 @@ pub const Server = struct {
         close: void,
     };
 
-    fn receive(self: *Self, handle: Handle) Event {
-        // ...
-    }
-    
-    fn pollInternal(self: *Self) []const Handle {
-        // ...
-    }
+    fn recv(self: *Self, handle: Handle) Event { // ... } 
+    fn pollHandles(self: *Self) []const Handle { // ... }
 
-    pub fn listen(self: *Self, port: u16) void {
-        // ...
-    }
+    pub fn listen(self: *Self, port: u16) void { // ... }
 
-    // Our job is to write: pub fn poll(self: *Self, ...) void { ... }
+    // ...
 }
 ```
 
 Below I'll go over a few different ways that we could write a
 `Server.poll` function that accepts a generic `handler` parameter
-to respond to reported events.
-
-**Note:** There are other ways to tackle the problem, but for this article I am
-only interested in compile-time generics.
+to respond to reported events[^1].
 
 ## Option 1: use duck typing
 
-Zig allows generic functions to take `anytype` parameters, generating
-a new concrete function at compile-time for each different parameter
-type used. Compile time [duck typing][2] is used to verify that the passed
-parameters have the required declarations and fields.
+Zig allows functions to take `anytype` parameters. At compile time, a
+concrete version of the function will be generated for each different parameter
+type that the generic function is called with.
 
-**Note:** In general, it is considered good practice to avoid directly accessing
-the fields of generic parameters. Functions in this article will never
-expect a generic type to have any specific fields.
+At compile time, [duck typing][2] is
+used to verify that each parameter type has the required fields and
+declarations[^4].
+In general, it is not good practice to directly access fields on generic
+parameters, so for the purposes of this article we will consider it
+forbidden to do so.
 
 A `poll` function for our `Server` struct using `anytype` is provided below.
 
@@ -78,9 +71,9 @@ pub const Server = struct {
     // ... 
 
     pub fn poll(self: *Self, handler: anytype) void {
-        const updated_handles = self.pollInternal();
+        const updated_handles = self.pollHandles();
         for (updated_handles) |handle| {
-            const event = self.receive(handle);
+            const event = self.recv(handle);
             switch (event) {
                 .open => handler.onOpen(handle),
                 .msg => |msg| handler.onMessage(handle, msg),
@@ -94,11 +87,11 @@ pub const Server = struct {
 ```
 
 The biggest downside of duck typing
-is that it is not immediately clear
-from the function signature of `poll` what can be passed in for the
-`handler` parameter.
+is that it will not be immediately clear
+from the function signature of `poll` what is allowed to be passed
+in for the `handler` parameter.
 Someone using our library would need to read the function body of `poll`,
-track down the return type of `Server.receive`, and then find the definition of
+track down the return type of `Server.recv`, and then find the definition of
 `Server.Event`.
 
 Below is a simple example server using a `handler` to logs events.
@@ -140,9 +133,10 @@ pub fn main() void {
 
 ## Option 2: use explicit function parameters 
 
-One way to provide clarity is to use `anytype` but never rely on duck typing.
-Everytime you would have relied on the existence of a type declaration,
-instead require the caller to pass an additional comptime parameter.
+A convention that will always provide clear requirements for
+`anytype` parameters is to simply never rely on duck typing.
+Everywhere that you would usually rely on the existence of a type declaration,
+instead require the caller to pass an additional `comptime` parameter.
 
 ```Zig
 // ...
@@ -154,9 +148,9 @@ pub fn poll(
     comptime onMessage: fn (@TypeOf(handler), Handle, Message) void,
     comptime onClose: fn (@TypeOf(handler), Handle) void
 ) void {
-    const updated_handles = self.pollInternal();
+    const updated_handles = self.pollHandles();
     for (updated_handles) |handle| {
-        const event = self.receive(handle);
+        const event = self.recv(handle);
         switch (event) {
             .open => onOpen(handler, handle),
             .msg => |msg| onMessage(handler, handle, msg),
@@ -168,8 +162,8 @@ pub fn poll(
 // ...
 ```
 
-While this does make type requirements explicit, it also makes calling
-`Server.poll` a bit more verbose.
+Unfortunately, while this does eliminate the issues with duck typing, it also
+makes calling `Server.poll` quite a bit more verbose.
 
 ```Zig
 // ...
@@ -189,9 +183,9 @@ while (true) {
 // ...
 ```
 
-A massive upside to this style of generics is that the functions are no
-longer tied directly to a type definition. This gives the library a lot of
-flexibility, and also lets the generic function work with types that
+However, a second massive upside to passing each function explicitly is that
+they can be defined separately from the type of the parameter. This provides
+a lot of flexibility, and even allows for types that
 don't support declarations, e.g. numeric types.
 
 ## Option 3: use custom type checking
@@ -200,7 +194,7 @@ In this section I will assume that you have at least skimmed the readme of
 my [Zig type trait library][1].
 
 Let us revisit the duck typing example, but this time add our own
-explicit type checking using traits. We'll first define a `Handler` trait as
+explicit type checking using traits[^3]. We'll first define a `Handler` trait as
 follows.
 
 ```Zig
@@ -221,9 +215,9 @@ Then we simply add a trait verification line at the top of `Server.poll`.
 pub fn poll(self: *Self, handler: anytype) void {
     comptime where(PointerChild(@TypeOf(handler)), implements(Handler));
 
-    const updated_handles = self.pollInternal();
+    const updated_handles = self.pollHandles();
     for (updated_handles) |handle| {
-        const event = self.receive(handle);
+        const event = self.recv(handle);
         switch (event) {
             .open => handler.onOpen(handle),
             .msg => |msg| handler.onMessage(handle, msg),
@@ -241,16 +235,11 @@ a type that implements the `Handler` trait.
 Trait verification also
 produces a nice compile error if the type of `handler` is invalid.
 
-**Note:** My trait library is obviously only one possible way to do
-explicit type checking. You could do it from basics with `if`
-and `switch` statements and the `@typeInfo` builtin, or define your
-own conventions and helper functions.
-
 ### Going a step further with interfaces
 
 Explicit type checking relies on the library writer to
 ensure that checks are up to date with how generic parameters
-are actually used. My trait library provides the comptime function
+are actually used. My trait library provides the `comptime` function
 `Interface` to generate an interface that only provides
 access to the declarations of a type that match a given set of traits.
 
@@ -262,9 +251,9 @@ A version of `Server.poll` using interfaces is provided below.
 pub fn poll(self: *Self, handler: anytype) void {
     const HandlerIfc = Interface(PointerChild(@TypeOf(handler)), Handler);
 
-    const updated_handles = self.pollInternal();
+    const updated_handles = self.pollHandles();
     for (updated_handles) |handle| {
-        const event = self.receive(handle);
+        const event = self.recv(handle);
         switch (event) {
             .open => HandlerIfc.onOpen(handler, handle),
             .msg => |msg| HandlerIfc.onMessage(handler, handle, msg),
@@ -282,3 +271,9 @@ define "necessary and sufficient" conditions for the type of `handler`.
 
 [1]: https://github.com/permutationlock/zig_type_traits
 [2]: https://en.wikipedia.org/wiki/Duck_typing
+
+[^1]: There are other ways to tackle the problem, but for this article I am only interested in compile-time generics.
+[^3]: There are many other ways to do explicit type checking if you aren't
+    interested in my library.
+[^4]: In Zig a variable or function declared in the namespace
+    of a type is called a declaration of that type.

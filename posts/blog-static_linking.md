@@ -301,12 +301,67 @@ dynamic library file into memory. Dynamic loading is generally used for purposes
 such as hot code swapping, e.g. updating a video game's code while it is running
 during development.
 
+```c
+> cat hot_reload.c
+```
+```c
+int open(const char *fname, int flags, int mode);
+long read(int fd, char *buffer, long len);
 
+int inotify_init(void);
+int inotify_add_watch(int fd, const char *pname, int mask);
+
+void *dlopen(const char *fname, int flags);
+void *dlsym(void *restrict handle, const char *restrict symbol);
+int dlclose(void *handle);
+
+int printf(const char *fmt, ...);
+
+int main() {
+    void *lib_handle;
+    int (*foo)(int);
+    struct { int wd, mask, cookie, len; char name[128]; } event;
+
+    int infd = inotify_init();
+    inotify_add_watch(infd, "./lock", 0x200);
+
+    while (1) {
+        lib_handle = dlopen("./libfoo.so", 2);
+        foo = dlsym(lib_handle, "foo");
+        printf("foo(5) = %d\n", foo(5));
+        read(infd, (char *)&event, sizeof(event));
+        dlclose(lib_handle);
+    }
+}
+```
+```c
+> zig cc --target=x86_64-linux-musl -o hot_reload hot_reload.c
+> mkdir lock
+> echo "int foo(int n) { return 2 * n; }" > foo.c
+> zig cc --target=x86_64-linux-musl -shared -o libfoo.so foo.c
+> ./hot_reload.c &
+foo(5) = 10
+> touch lock/foo
+> echo "int foo(int n) { return 3 * n; }" > foo.c
+> zig cc --target=x86_64-linux-musl -shared -o libfoo.so foo.c
+> rm lock/fool
+foo(5) = 15
+```
+<div class=label>Watching and re-loading a dynamic library during runtime</div>
 
 In dynamic linking a *dynamic executable* lists in its binary format
 the paths to the dynamic library files that it requres to run.
 A system linker will then make sure that each
 required library is loaded into memory and provided to the executable.
+
+One benefit of dynamic linking is memory savings: the system linker can ensure
+that only one copy of each library is loaded into memory and shared between
+all applications that depend on it. Another upside is
+patching: a dynamic library can be updated
+without updating the executables that depend on it.
+E.g. instead of the linking a static musl `libc.a` into every binary, the
+standard for GNU libc is to make a dynamic `libc.so` that is
+shared by all dynamic executables.
 
 ```c
 > zig cc --target=x86_64-linux-gnu -shared -o libfunmath.so fibonacci.c collatz.c
@@ -321,15 +376,6 @@ fibonacci(5) = 8
 	/lib64/ld-linux-x86-64.so.2 => /usr/lib64/ld-linux-x86-64.so.2 (...)
 ```
 <div class=label>Creating a shared library and linking it into a dynamic executable</div>
-
-One benefit of dynamic linking is memory savings: the system linker can ensure
-that only one copy of each library is loaded into memory and shared between
-all applications that depend on it. Another upside is
-patching: a dynamic library can be updated
-without updating the executables that depend on it.
-E.g. instead of the linking a static musl `libc.a` into every binary, the
-standard for GNU libc is to make a dynamic `libc.so` that is
-shared by all dynamic executables.
 
 An executable that does not require dynamic linking is called a *static
 executable*. The big strength of static executables

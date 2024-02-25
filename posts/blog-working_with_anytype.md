@@ -377,27 +377,28 @@ most situations.
    from a generic function signature are usually poor.
 
 For all the above reasons, I decided to make [zimpl][5]. The [zimple][5]
-library is a tiny subset  of [ztrait][1] containing ~50 lines of code and
-two public declarations: `Impl` and `PtrChild`.
-
- - `zimpl.Impl` is a renamed and simplified version of `ztrait.Interface`.
- - `zimpl.PtrChild` provides exactly the same functionality as
-   `ztrati.PointerChild`.
+library is a tiny subset  of [ztrait][1] containing ~20 lines of code and
+the one public declaration `zimpl.Impl` that is a simplified
+`ztrait.Interface`.
 
 A version of `Server.poll` using `zimpl` would go as follows.
 
 ```Zig
-pub fn poll(
-    self: *Self,
-    handler: anytype,
-    handler_impl: Impl(PtrChild(@TypeOf(handler)), Handler)
-) void {
+pub fn Handler(comptime Type: type) type {
+    return struct {
+        onOpen: fn (Type, Handle) void,
+        onMessage: fn (Type, Handle, []const u8) void,
+        onClose: fn (Type, Handle) void,
+    };
+}
+
+pub fn poll(self: *Self, ctx: anytype, impl: Impl(Handler, @TypeOf(ctx))) void {
     try self.pollSockets();
     while (self.getEvent()) |evt| {
         switch (evt) {
-            .open => |handle| handler_impl.onOpen(handler, handle),
-            .msg => |msg| handler_impl.onMessage(handler, msg.handle, msg.bytes),
-            .close => |handle| handler_impl.onClose(handler, handle),
+            .open => |handle| impl.onOpen(ctx, handle),
+            .msg => |msg| impl.onMessage(ctx, msg.handle, msg.bytes),
+            .close => |handle| impl.onClose(ctx, handle),
         }
     }
 }
